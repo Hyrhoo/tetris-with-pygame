@@ -11,7 +11,7 @@ from json import load, dump
 from unicodedata import decimal
 
 from fonctoions.bouton import *
-#from fonctoions.sound import *
+
 ca_background = "data/images/background/"
 main_menu_background = pygame.image.load(ca_background + "main_background.png").convert_alpha()
 main_menu_background = pygame.transform.scale(main_menu_background, (resize(1536), resize(864)))

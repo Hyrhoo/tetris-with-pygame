@@ -3,7 +3,7 @@ try:
     from fonctoions.fonc import *
     from fonctoions.constantes import *
     from fonctoions.sound import *
-except ModuleNotFoundError or ImportError: 
+except ModuleNotFoundError or ImportError:
     from fonc import *
     from constantes import *
     from sound import *

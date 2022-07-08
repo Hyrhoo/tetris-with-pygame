@@ -1,10 +1,32 @@
-
+try: from fonctoions.constantes import DEFAULT_FOLDER, DEFAULT_EXTENTION
+except ModuleNotFoundError or ImportError: from constantes import DEFAULT_FOLDER, DEFAULT_EXTENTION
 import pygame
 pygame.mixer.pre_init()
 pygame.init()
 pygame.mixer.set_num_channels(32)
+mix = pygame.mixer.Sound
 
 sounds = {}
+
+def test_folder(name, folder, suite, extention):
+    """
+    The test_folder function takes a name, folder, suite and extention as arguments. 
+    It then creates a sound object from the mix function using the given folder and suite. 
+    The sound object is stored in sounds with the given name.
+    
+    :param name: Store the name of the sound
+    :param folder: Specify the folder where the sound files are located
+    :param suite: Select the folder that contains the sounds
+    :param extention: Select the correct folder
+    :return: The value of the sounds dictionary
+    :doc-author: Trelent
+    """
+    global sounds
+    try: sounds[name] = mix(folder+suite+extention)
+    except FileNotFoundError: 
+        print("/!\ fichier \"{}\" manquant ou introuvable.\n".format(folder+suite+extention))
+        sounds[name] = mix("data/sound/"+DEFAULT_FOLDER+suite+DEFAULT_EXTENTION)
+
 def init_music(folder, extention):
     """
     The init_music function initializes the music for the game.
@@ -16,55 +38,55 @@ def init_music(folder, extention):
     :return: A dictionary of all the sounds
     :doc-author: Trelent
     """
-    mix = pygame.mixer.Sound
+    print("")
     folder = "data/sound/"+folder
 
     global sounds
     sounds.clear()
 
     # dossier menu
-    sounds["main_menu"] = mix(folder+"/menu/main_menu"+extention)
-    sounds["back"] = mix(folder+"/menu/back"+extention)
-    sounds["select"] = mix(folder+"/menu/select"+extention)
-    sounds["cursor"] = mix(folder+"/menu/cursor"+extention)
-    sounds["game_loanch"] = mix(folder+"/menu/game_loanch"+extention)
-    sounds["pause"] = mix(folder+"/menu/pause"+extention)
+    test_folder("main_menu",   folder, "/menu/main_menu", extention)
+    test_folder("back",        folder, "/menu/back", extention)
+    test_folder("select",      folder, "/menu/select", extention)
+    test_folder("cursor",      folder, "/menu/cursor", extention)
+    test_folder("game_loanch", folder, "/menu/game_loanch", extention)
+    test_folder("pause",       folder, "/menu/pause", extention)
 
 
     # dossier game
-    sounds["theme_1"] = mix(folder+"/game/game_theme_1"+extention)
-    sounds["theme_2"] = mix(folder+"/game/game_theme_2"+extention)
-    sounds["theme_3"] = mix(folder+"/game/game_theme_3"+extention)
+    test_folder("theme_1", folder, "/game/game_theme_1", extention)
+    test_folder("theme_2", folder, "/game/game_theme_2", extention)
+    test_folder("theme_3", folder, "/game/game_theme_3", extention)
 
     # dossier game_start du dossier game
-    sounds["pres"] = mix(folder+"/game/game_start/start_1"+extention)
-    sounds["cest_parti"] = mix(folder+"/game/game_start/start_2"+extention)
+    test_folder("pres",       folder, "/game/game_start/start_1", extention)
+    test_folder("cest_parti", folder, "/game/game_start/start_2", extention)
 
     # dossier level_up du dossier game
-    sounds["lvl_up_1"] = mix(folder+"/game/level_up/lvl_up_1"+extention)
-    sounds["lvl_up_2"] = mix(folder+"/game/level_up/lvl_up_2"+extention)
+    test_folder("lvl_up_1", folder, "/game/level_up/lvl_up_1", extention)
+    test_folder("lvl_up_2", folder, "/game/level_up/lvl_up_2", extention)
 
     # dossier line_clear du dossier game
-    sounds["single"] = mix(folder+"/game/line_clear/single"+extention)
-    sounds["double"] = mix(folder+"/game/line_clear/double"+extention)
-    sounds["triple"] = mix(folder+"/game/line_clear/triple"+extention)
-    sounds["tetris"] = mix(folder+"/game/line_clear/tetris"+extention)
-    sounds["all_clear"] = mix(folder+"/game/line_clear/all_clear"+extention)
+    test_folder("single",    folder, "/game/line_clear/single", extention)
+    test_folder("double",    folder, "/game/line_clear/double", extention)
+    test_folder("triple",    folder, "/game/line_clear/triple", extention)
+    test_folder("tetris",    folder, "/game/line_clear/tetris", extention)
+    test_folder("all_clear", folder, "/game/line_clear/all_clear", extention)
 
     # dossier parti_end du dossier game
-    sounds["danger"] = mix(folder+"/game/parti_end/danger"+extention)
-    sounds["win"] = mix(folder+"/game/parti_end/win"+extention)
-    sounds["lose"] = mix(folder+"/game/parti_end/lose"+extention)
+    test_folder("danger", folder, "/game/parti_end/danger", extention)
+    test_folder("win", folder, "/game/parti_end/win", extention)
+    test_folder("lose", folder, "/game/parti_end/lose", extention)
 
     # dossier move du dossier game
-    sounds["move"] = mix(folder+"/game/move/move"+extention)
-    sounds["rotate"] = mix(folder+"/game/move/rotate"+extention)
-    sounds["soft_drop"] = mix(folder+"/game/move/soft_drop"+extention)
-    sounds["hard_drop"] = mix(folder+"/game/move/hard_drop"+extention)
-    sounds["verouillage"] = mix(folder+"/game/move/verouillage"+extention)
-    sounds["blocked"] = mix(folder+"/game/move/blocked"+extention)
-    sounds["T-spin"] = mix(folder+"/game/move/T-spin"+extention)
-    sounds["hold"] = mix(folder+"/game/move/hold"+extention)
+    test_folder("move",        folder, "/game/move/move", extention)
+    test_folder("rotate",      folder, "/game/move/rotate", extention)
+    test_folder("soft_drop",   folder, "/game/move/soft_drop", extention)
+    test_folder("hard_drop",   folder, "/game/move/hard_drop", extention)
+    test_folder("verouillage", folder, "/game/move/verouillage", extention)
+    test_folder("blocked",     folder, "/game/move/blocked", extention)
+    test_folder("T-spin",      folder, "/game/move/T-spin", extention)
+    test_folder("hold",        folder, "/game/move/hold", extention)
 
 
     #a = pygame.mixer.Sound(folder+"01 Title"+extention)
