@@ -26,6 +26,7 @@ def test_folder(name, folder, suite, extention):
     except FileNotFoundError: 
         print("/!\ fichier \"{}\" manquant ou introuvable.\n".format(folder+suite+extention))
         sounds[name] = mix("data/sound/"+DEFAULT_FOLDER+suite+DEFAULT_EXTENTION)
+    sounds[name].set_volume(0.5)
 
 def init_music(folder, extention):
     """

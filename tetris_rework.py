@@ -289,6 +289,7 @@ def scores():
         clock.tick(FPS)
 
 def quitter_jeu():
+    pygame.time.wait(260)
     pygame.quit()
     sys.exit()
 
