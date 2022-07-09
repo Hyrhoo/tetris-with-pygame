@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jun  8 08:08:28 2022
+
+@author: Hyrhoo
+"""
+
 try: 
     from fonctions.fonc import *
     from fonctions.constantes import *
