@@ -45,6 +45,32 @@ def mid_screen(valiu: int, divi: int = 2):
     mid = int(round(screen_size[valiu] // divi, 0))
     return mid
 
+def reset_scroll():
+    global screen_pos
+    screen_pos = 0
+
+def derouler_screen(haut, bas, e):
+    """
+    The derouler_screen function is used to scroll through the screen.
+    It takes 3 arguments: haut, bas and e.
+    h is the top of the screen, b is the bottom of it and e is an event.
+    
+    :param haut: Set the top of the scrolling region
+    :param bas: Define the bottom of the screen
+    :param e: Get the mouse position
+    :return: The position of the scroll bar
+    :doc-author: Trelent
+    """
+    global screen_pos
+    scroll = resize(30)
+    if e.button == 4:
+        screen_pos += scroll
+        if screen_pos > bas:
+            screen_pos = bas
+    elif e.button == 5:
+        screen_pos -= scroll
+        if screen_pos < haut:
+            screen_pos = haut
 
 def changer_couleur(couleur, opperation):
     """

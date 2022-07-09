@@ -56,30 +56,10 @@ plateau = [[0,0,0,0,0,0,0,0,0,0],
            [0,0,0,0,0,0,0,0,0,0]]
 
 
-def reset_scroll_main():
-    reset_scroll()
-    global screen_pos
-    screen_pos = 0
-
-def derouler_screen_main(haut, bas, e):
-    derouler_screen(haut, bas, e)
-    global screen_pos
-    scroll = resize(30)
-    if e.button == 4:
-        screen_pos += scroll
-        if screen_pos > bas:
-            screen_pos = bas
-    elif e.button == 5:
-        screen_pos -= scroll
-        if screen_pos < haut:
-            screen_pos = haut
-
 
 def main_menu():
-    global screen_pos
-    screen_pos = 0
-    reset_scroll_main()
-    Bouton.reset()
+    reset_scroll()
+    Interact_Object.reset_objects()
     # initialisation des boutons
     Bouton(select_mod, "Jouer", pos_y=mid_screen(1)-resize(150), back_color=(249,198,54), texte_color=(50,50,15))
     Bouton(parametre, "Paramètres", pos_y=mid_screen(1)-resize(50), back_color=(23,147,231), texte_color=(15,23,50))
@@ -93,36 +73,34 @@ def main_menu():
                 quitter_jeu()
 
             # gestion de la pression des boutons
-            for bouton in Bouton.boutons:
-                bouton.bonton_presser(e)
+            for object_ in Interact_Object.objects:
+                object_.interact(e)
 
             if e.type == pygame.KEYDOWN:
                 if e.key == 27:
                     quitter_jeu()
-                Bouton.deplacer_cursor(e)
+                Interact_Object.deplacer_cursor(e)
                 print(e)
 
             if e.type == pygame.MOUSEBUTTONDOWN:
-                derouler_screen_main(0, 0, e)
+                derouler_screen(0, 0, e)
         
         # update affichage
         SCREEN.fill((54,57,63))
         SCREEN.blit(main_menu_background, (0, 0-screen_size[1]//2.8))
         pygame.mouse.set_cursor(0)
-        # affichage des boutons
-        for bouton in Bouton.boutons:
-            bouton.detect_bouton_survole()
-            bouton.afficher_bouton()
+        # affichage des objets
+        for object_ in Interact_Object.objects:
+            object_.detect_survole()
+            object_.affichage()
         pygame.display.flip()
         
         # set fps
         clock.tick(60)
 
 def select_mod():
-    global screen_pos
-    screen_pos = 0
-    reset_scroll_main()
-    Bouton.reset()
+    reset_scroll()
+    Interact_Object.reset_objects()
 
     Bouton(main_menu, "BACK", back_color=(150,100,100), texte_color=(50,0,0), pos_x=resize(55), pos_y=resize(25), hauteur=40, largeur=100, taille_texte=30, sound="back")
 
@@ -139,37 +117,35 @@ def select_mod():
             if e.type == pygame.QUIT:
                 quitter_jeu()
         
-            for bouton in Bouton.boutons:
-                bouton.bonton_presser(e)
+            for object_ in Interact_Object.objects:
+                object_.interact(e)
             
             if e.type == pygame.KEYDOWN:
                 if e.key == 27:
                     play_sound("back")
                     main_menu()
-                Bouton.deplacer_cursor(e)
+                Interact_Object.deplacer_cursor(e)
                 print(e)
 
             if e.type == pygame.MOUSEBUTTONDOWN:
-                derouler_screen_main(0, 0, e)
+                derouler_screen(0, 0, e)
         
         # update affichage
         SCREEN.fill((54,57,63))
         SCREEN.blit(jeu_background, (0,0))
         pygame.mouse.set_cursor(0)
-        # affichage des boutons
-        for bouton in Bouton.boutons:
-            bouton.detect_bouton_survole()
-            bouton.afficher_bouton()
+        # affichage des objets
+        for object_ in Interact_Object.objects:
+            object_.detect_survole()
+            object_.affichage()
         pygame.display.flip()
         
         # set fps
         clock.tick(FPS)
 
 def parametre():
-    global screen_pos
-    screen_pos = 0
-    reset_scroll_main()
-    Bouton.reset()
+    reset_scroll()
+    Interact_Object.reset_objects()
 
     Bouton(main_menu, "BACK", back_color=(150,100,100), texte_color=(50,0,0), pos_x=resize(55), pos_y=resize(25), hauteur=40, largeur=100, taille_texte=30, sound="back")
 
@@ -178,37 +154,35 @@ def parametre():
             if e.type == pygame.QUIT:
                 quitter_jeu()
         
-            for bouton in Bouton.boutons:
-                bouton.bonton_presser(e)
+            for object_ in Interact_Object.objects:
+                object_.interact(e)
             
             if e.type == pygame.KEYDOWN:
                 if e.key == 27:
                     play_sound("back")
                     main_menu()
-                Bouton.deplacer_cursor(e)
+                Interact_Object.deplacer_cursor(e)
                 print(e)
 
             if e.type == pygame.MOUSEBUTTONDOWN:
-                derouler_screen_main(-100, 0, e)
+                derouler_screen(-100, 0, e)
         
         # update affichage
         SCREEN.fill((54,57,63))
         SCREEN.blit(parametres_background, (0,0))
         pygame.mouse.set_cursor(0)
-        # affichage des boutons
-        for bouton in Bouton.boutons:
-            bouton.detect_bouton_survole()
-            bouton.afficher_bouton()
+        # affichage des objets
+        for object_ in Interact_Object.objects:
+            object_.detect_survole()
+            object_.affichage()
         pygame.display.flip()
         
         # set fps
         clock.tick(FPS)
 
 def maps():
-    global screen_pos
-    screen_pos = 0
-    reset_scroll_main()
-    Bouton.reset()
+    reset_scroll()
+    Interact_Object.reset_objects()
 
     Bouton(main_menu, "BACK", back_color=(150,100,100), texte_color=(50,0,0), pos_x=resize(55), pos_y=resize(25), hauteur=40, largeur=100, taille_texte=30, sound="back")
 
@@ -217,8 +191,8 @@ def maps():
             if e.type == pygame.QUIT:
                 quitter_jeu()
         
-            for bouton in Bouton.boutons:
-                bouton.bonton_presser(e)
+            for object_ in Interact_Object.objects:
+                object_.interact(e)
             
             if e.type == pygame.KEYDOWN:
                 if e.key == 27:
@@ -228,26 +202,24 @@ def maps():
                 print(e)
 
             if e.type == pygame.MOUSEBUTTONDOWN:
-                derouler_screen_main(0, 0, e)
+                derouler_screen(0, 0, e)
         
         # update affichage
         SCREEN.fill((54,57,63))
         SCREEN.blit(map_background, (0,0))
         pygame.mouse.set_cursor(0)
-        # affichage des boutons
-        for bouton in Bouton.boutons:
-            bouton.detect_bouton_survole()
-            bouton.afficher_bouton()
+        # affichage des objets
+        for object_ in Interact_Object.objects:
+            object_.detect_survole()
+            object_.affichage()
         pygame.display.flip()
         
         # set fps
         clock.tick(FPS)
 
 def scores():
-    global screen_pos
-    screen_pos = 0
-    reset_scroll_main()
-    Bouton.reset()
+    reset_scroll()
+    Interact_Object.reset_objects()
 
     Bouton(main_menu, "BACK", back_color=(150,100,100), texte_color=(50,0,0), pos_x=resize(55), pos_y=resize(25), hauteur=40, largeur=100, taille_texte=30, sound="back")
 
@@ -256,8 +228,8 @@ def scores():
             if e.type == pygame.QUIT:
                 quitter_jeu()
         
-            for bouton in Bouton.boutons:
-                bouton.bonton_presser(e)
+            for object_ in Interact_Object.objects:
+                object_.interact(e)
             
             if e.type == pygame.KEYDOWN:
                 if e.key == 27:
@@ -267,16 +239,16 @@ def scores():
                 print(e)
 
             if e.type == pygame.MOUSEBUTTONDOWN:
-                derouler_screen_main(-100, 0, e)
+                derouler_screen(-100, 0, e)
         
         # update affichage
         SCREEN.fill((54,57,63))
         SCREEN.blit(scores_background, (0,0))
         pygame.mouse.set_cursor(0)
-        # affichage des boutons
-        for bouton in Bouton.boutons:
-            bouton.detect_bouton_survole()
-            bouton.afficher_bouton()
+        # affichage des objets
+        for object_ in Interact_Object.objects:
+            object_.detect_survole()
+            object_.affichage()
         pygame.display.flip()
         
         # set fps
