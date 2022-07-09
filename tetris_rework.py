@@ -29,11 +29,6 @@ jeu_background = pygame.transform.scale(jeu_background, (resize(1536), resize(86
 
 init_music("- Tetris 99 - Switch", ".wav")
 
-def kaka_proutprout():
-    with open("map/map1.json", "r") as f:
-        plateau,piece = load(f)
-    print(plateau, piece)
-
 plateau = [[0,0,0,0,0,0,0,0,0,0],
            [0,0,0,0,0,0,0,0,0,0],
            [0,0,0,0,0,0,0,0,0,0],
