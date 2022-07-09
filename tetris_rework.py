@@ -7,10 +7,9 @@ Created on Wed Jun  8 08:08:28 2022
 
 import sys
 import random
-from json import load, dump
 from unicodedata import decimal
 
-from fonctoions.bouton import *
+from fonctions.bouton import *
 
 ca_background = "data/images/background/"
 main_menu_background = pygame.image.load(ca_background + "main_background.png").convert_alpha()
@@ -74,11 +73,6 @@ def derouler_screen_main(haut, bas, e):
         screen_pos -= scroll
         if screen_pos < haut:
             screen_pos = haut
-
-def lecture_fichier(fichier, metod = "r"):
-    with open("data/" + fichier + ".json", metod, encoding="UTF-8") as f:
-        contenu = load(f)
-    return contenu
 
 
 def main_menu():
@@ -296,8 +290,12 @@ def quitter_jeu():
 def nul():
     return
 
-print(lecture_fichier("scores/scores_libre"))
 touches = lecture_fichier("touches")
+parametres = lecture_fichier("parametres")
+
 stop_all_sound()
-play_sound("main_menu", -1)
+play_music("main_menu", -1)
+set_volum_music(parametres["global_volume"] * parametres["music_volume"])
+set_volum_sounds(parametres["global_volume"] * parametres["sound_volume"])
+
 main_menu()        

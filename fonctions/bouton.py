@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 try: 
-    from fonctoions.fonc import *
-    from fonctoions.constantes import *
-    from fonctoions.sound import *
+    from fonctions.fonc import *
+    from fonctions.constantes import *
+    from fonctions.sound import *
 except ModuleNotFoundError or ImportError:
     from fonc import *
     from constantes import *

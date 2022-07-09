@@ -16,7 +16,7 @@ def calcule_multi_reso(screen_size):
     diff_y = screen_size[1]/864
     return min(diff_x, diff_y)
 
-
+from json import load, dump
 try:import pygame
 except ImportError: raise ImportError("""
 >>> La bibliothèque pygame n'est pas installer sur votre ordinateur
@@ -33,6 +33,10 @@ clock = pygame.time.Clock()
 MULTI_RESO = calcule_multi_reso(screen_size)
 screen_size = (1536*MULTI_RESO, 864*MULTI_RESO)
 
+def lecture_fichier(fichier, metod = "r"):
+    with open("data/" + fichier + ".json", metod, encoding="UTF-8") as f:
+        contenu = load(f)
+    return contenu
 
 def resize(valiu: int):
     return int(round(valiu * MULTI_RESO, 0))
@@ -40,6 +44,7 @@ def resize(valiu: int):
 def mid_screen(valiu: int, divi: int = 2):
     mid = int(round(screen_size[valiu] // divi, 0))
     return mid
+
 
 def changer_couleur(couleur, opperation):
     """
