@@ -10,6 +10,7 @@ import random
 from unicodedata import decimal
 
 from fonctions.bouton import *
+from fonctions.tirette import *
 
 ca_background = "data/images/background/"
 main_menu_background = pygame.image.load(ca_background + "main_background.png").convert_alpha()
@@ -60,11 +61,12 @@ def main_menu():
     Bouton(parametre, "Paramètres", pos_y=mid_screen(1)-resize(50), back_color=(23,147,231), texte_color=(15,23,50))
     Bouton(maps, "Maps", pos_y=mid_screen(1)+resize(50), back_color=(231, 147, 157), texte_color=(50,15,20))
     Bouton(scores, "Score", pos_y=mid_screen(1)+resize(150), back_color=(23,231,147), texte_color=(15,50,23))
-    Bouton(quitter_jeu, "Quitter", pos_y=mid_screen(1)+resize(250), back_color=(255,123,76), texte_color=(50,15,23))
+    Bouton(quitter_jeu, "Quitter", pos_y=mid_screen(1)+resize(250), back_color=(255,123,76), texte_color=(50,15,23), sound="game_loanch")
     # main loop du menu principale
     while True:
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
+                play_sound("game_loanch")
                 quitter_jeu()
 
             # gestion de la pression des boutons
@@ -73,6 +75,7 @@ def main_menu():
 
             if e.type == pygame.KEYDOWN:
                 if e.key == 27:
+                    play_sound("game_loanch")
                     quitter_jeu()
                 Interact_Object.deplacer_cursor(e)
                 print(e)
@@ -110,6 +113,7 @@ def select_mod():
     while True:
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
+                play_sound("game_loanch")
                 quitter_jeu()
         
             for object_ in Interact_Object.objects:
@@ -143,10 +147,12 @@ def parametre():
     Interact_Object.reset_objects()
 
     Bouton(main_menu, "BACK", back_color=(150,100,100), texte_color=(50,0,0), pos_x=resize(55), pos_y=resize(25), hauteur=40, largeur=100, taille_texte=30, sound="back")
+    Tirette(init_valiu=int(parametres["global_volume"]*10))
 
     while True:
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
+                play_sound("game_loanch")
                 quitter_jeu()
         
             for object_ in Interact_Object.objects:
@@ -162,7 +168,7 @@ def parametre():
             if e.type == pygame.MOUSEBUTTONDOWN:
                 derouler_screen(-100, 0, e)
         
-        # update affichage
+        # update affichage²
         SCREEN.fill((54,57,63))
         SCREEN.blit(parametres_background, (0,0))
         pygame.mouse.set_cursor(0)
@@ -184,6 +190,7 @@ def maps():
     while True:
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
+                play_sound("game_loanch")
                 quitter_jeu()
         
             for object_ in Interact_Object.objects:
@@ -221,6 +228,7 @@ def scores():
     while True:
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
+                play_sound("game_loanch")
                 quitter_jeu()
         
             for object_ in Interact_Object.objects:
@@ -250,7 +258,7 @@ def scores():
         clock.tick(FPS)
 
 def quitter_jeu():
-    pygame.time.wait(260)
+    pygame.time.wait(550)
     pygame.quit()
     sys.exit()
 
