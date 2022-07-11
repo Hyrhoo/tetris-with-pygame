@@ -42,11 +42,11 @@ class Interact_Object():
             if not sound_play[1]:
                 play_sound("cursor")
                 sound_play[1] = True
-            sound_play[0] = len(Interact_Object.objects) + 1
+            sound_play[0] = len(Interact_Object.objects) + 3
             self.back_color = changer_couleur_100(self.init_back_color, -25)
             Interact_Object.select = -1
             survoler = True
-        elif (Interact_Object.select != -1 and Interact_Object.boutons[Interact_Object.select] is self):
+        elif (Interact_Object.select != -1 and Interact_Object.objects[Interact_Object.select] is self):
             self.back_color = changer_couleur_100(self.init_back_color, -25)
             survoler = True
         else:
@@ -63,11 +63,11 @@ class Interact_Object():
             play_sound("cursor")
             Interact_Object.select -= 1
             if Interact_Object.select < 0:
-                Interact_Object.select = len(Interact_Object.boutons)-1
+                Interact_Object.select = len(Interact_Object.objects)-1
         if event.key == 1073741905:
             play_sound("cursor")
             Interact_Object.select += 1
-            if Interact_Object.select > len(Interact_Object.boutons)-1:
+            if Interact_Object.select > len(Interact_Object.objects)-1:
                 Interact_Object.select = 0
 
     def reset_objects():
