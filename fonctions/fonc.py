@@ -38,10 +38,14 @@ clock = pygame.time.Clock()
 MULTI_RESO = calcule_multi_reso(screen_size)
 screen_size = (1536*MULTI_RESO, 864*MULTI_RESO)
 
-def lecture_fichier(fichier, metod = "r"):
-    with open("data/" + fichier + ".json", metod, encoding="UTF-8") as f:
-        contenu = load(f)
-    return contenu
+def lecture_fichier(fichier, metod = "r", donner = None):
+    if metod == "r":
+        with open("data/" + fichier + ".json", metod, encoding="UTF-8") as f:
+            contenu = load(f)
+        return contenu
+    elif metod == "w":
+        with open("data/" + fichier + ".json", metod, encoding="UTF-8") as f:
+            dump(donner, f, ensure_ascii=False, indent=2)
 
 def resize(valiu: int):
     return int(round(valiu * MULTI_RESO, 0))
@@ -70,12 +74,12 @@ def derouler_screen(haut, bas, e):
     scroll = resize(30)
     if e.button == 4:
         screen_pos += scroll
-        if screen_pos > bas:
-            screen_pos = bas
+        if screen_pos > - haut:
+            screen_pos = - haut
     elif e.button == 5:
         screen_pos -= scroll
-        if screen_pos < haut:
-            screen_pos = haut
+        if screen_pos < - bas:
+            screen_pos = - bas
 
 def changer_couleur(couleur, opperation):
     """

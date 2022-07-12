@@ -83,14 +83,15 @@ class Tirette(Interact_Object):
         if survoler:
             self.calcul_indication()
             pygame.draw.rect(SCREEN, self.init_back_color, self.rectangle_indic, 0 , resize(10))
-            pygame.draw.rect(SCREEN, changer_couleur_100(self.init_back_color, 15), self.rectangle_indic, resize(3) , resize(5))
+            pygame.draw.rect(SCREEN, changer_couleur_100(self.init_back_color, 15), self.rectangle_indic, resize(3) , resize(10))
             SCREEN.blit(self.texte_indic, (self.pos_texte_indic_x, self.pos_texte_indic_y + screen_pos))
 
     def interact(self, event):
         survoler = self.objetc_survol()
+        value = self.init_valiu
         if pygame.mouse.get_pressed()[0]:
                 if survoler:
-                    self.init_valiu = (pygame.mouse.get_pos()[0] - self.start) // self.deca_valiu
+                    self.init_valiu = int(round((pygame.mouse.get_pos()[0] - self.start) / self.deca_valiu, 0))
                     if self.init_valiu < self.valius[0]: self.init_valiu = self.valius[0]
                     elif self.init_valiu > self.valius[-1]: self.init_valiu = self.valius[-1]
         if event.type == pygame.KEYDOWN:
@@ -101,3 +102,6 @@ class Tirette(Interact_Object):
                     self.init_valiu -= 1
                 if self.init_valiu < self.valius[0]: self.init_valiu = self.valius[0]
                 elif self.init_valiu > self.valius[-1]: self.init_valiu = self.valius[-1]
+        if value != self.init_valiu:
+            play_sound("move")
+        return self.init_valiu

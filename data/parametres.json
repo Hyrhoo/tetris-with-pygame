@@ -1,3 +1,37 @@
-{"global_volume": 0.5,
-"music_volume": 0.5,
-"sound_volume": 0.5}
+{
+  "volume": {
+    "global_volume": 0.5,
+    "music_volume": 0.5,
+    "sound_volume": 0.5
+  },
+  "touches": {
+    "chute instantané": [
+      122,
+      "z"
+    ],
+    "chute rapide": [
+      115,
+      "s"
+    ],
+    "deplacement à droit": [
+      113,
+      "q"
+    ],
+    "deplacement à gauche": [
+      100,
+      "d"
+    ],
+    "rotation horair": [
+      107,
+      "k"
+    ],
+    "rotation anti-horair": [
+      109,
+      "m"
+    ],
+    "reserve": [
+      32,
+      " "
+    ]
+  }
+}
