@@ -14,8 +14,6 @@ except ModuleNotFoundError or ImportError:
     from constantes import *
     from sound import *
 
-sound_play = [0, False]
-
 class Interact_Object():
 
     objects = []
@@ -30,19 +28,18 @@ class Interact_Object():
         self.arrondisement = resize(arrondissement)
         self.back_color = back_color
         self.init_back_color = back_color
+        self.sound_play = False
 
     def objetc_survol(self):
         try: from fonctions.fonc import screen_pos
         except ModuleNotFoundError or ImportError: from fonc import screen_pos
-        global sound_play
         survoler = False
         self.rectangle.y += screen_pos
         if self.rectangle.collidepoint(pygame.mouse.get_pos()):
             pygame.mouse.set_cursor(11)
-            if not sound_play[1]:
+            if not self.sound_play:
                 play_sound("cursor")
-                sound_play[1] = True
-            sound_play[0] = len(Interact_Object.objects) + 3
+                self.sound_play = True
             self.back_color = changer_couleur_100(self.init_back_color, -25)
             Interact_Object.select = -1
             survoler = True
@@ -52,8 +49,7 @@ class Interact_Object():
         else:
             self.back_color = self.init_back_color
             survoler = False
-        sound_play[0] -= 1
-        if sound_play[0] <= 0: sound_play[1] = False
+            self.sound_play = False
         self.rectangle.y -= screen_pos
         return survoler
 
