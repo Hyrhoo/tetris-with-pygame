@@ -8,7 +8,7 @@ Created on Wed Jun  8 08:08:28 2022
 FPS = 60
 
 DEFAULT_FOLDER = "- Tetris 99 - Switch"
-DEFAULT_EXTENTION = ".wav"
+DEFAULT_EXTENTION = ".mp3"
 
 COULEUR = {0:(54,57,63),
         1:(156,207,240),

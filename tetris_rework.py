@@ -31,7 +31,7 @@ scores_background = pygame.transform.scale(scores_background, (resize(1536), res
 jeu_background = pygame.image.load(ca_background + "jeu_background.jpg").convert()
 jeu_background = pygame.transform.scale(jeu_background, (resize(1536), resize(864)))
 
-init_music("- Tetris 99 - Switch", ".wav")
+init_music("- Tetris 99 - Switch", ".mp3")
 
 plateau = [[0,0,0,0,0,0,0,0,0,0],
            [0,0,0,0,0,0,0,0,0,0],
