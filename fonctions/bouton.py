@@ -54,7 +54,7 @@ class Bouton(Interact_Object):
         self.emplacement_texte = self.font.size(self.texte)
         self.texte_surface = self.font.render(self.texte, True, self.texte_color)
 
-        self.deca = ((self.largeur - self.emplacement_texte[0]) // 2, (self.hauteur - self.emplacement_texte[1]) // 2)
+        self.deca = ((self.largeur - self.emplacement_texte[0]) / 2, (self.hauteur - self.emplacement_texte[1]) / 2)
         self.sound = sound
         self.fonc = fonc
         Interact_Object.objects.append(self)
@@ -72,7 +72,7 @@ class Bouton(Interact_Object):
         try: from fonctions.fonc import screen_pos
         except ModuleNotFoundError or ImportError: from fonc import screen_pos
         self.emplacement_texte = self.font.size(self.texte)
-        self.deca = ((self.largeur - self.emplacement_texte[0]) // 2, (self.hauteur - self.emplacement_texte[1]) // 2)
+        self.deca = ((self.largeur - self.emplacement_texte[0]) / 2, (self.hauteur - self.emplacement_texte[1]) / 2)
         self.rectangle.y += screen_pos
         pygame.draw.rect(SCREEN, self.back_color, self.rectangle, 0 , self.arrondisement)
         pygame.draw.rect(SCREEN, changer_couleur_100(self.texte_color, 15), self.rectangle, resize(5) , self.arrondisement)

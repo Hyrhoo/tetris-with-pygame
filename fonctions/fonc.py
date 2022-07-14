@@ -51,7 +51,7 @@ def resize(valiu: int):
     return int(round(valiu * MULTI_RESO, 0))
 
 def mid_screen(valiu: int, divi: int = 2):
-    mid = int(round(screen_size[valiu] // divi, 0))
+    mid = int(round(screen_size[valiu] / divi, 0))
     return mid
 
 def reset_scroll():

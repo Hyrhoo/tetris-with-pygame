@@ -64,7 +64,7 @@ def main_menu():
     Bouton(parametre, "Paramètres", pos_y=mid_screen(1)-resize(50), back_color=(23,147,231), texte_color=(15,23,50))
     Bouton(maps, "Maps", pos_y=mid_screen(1)+resize(50), back_color=(231, 147, 157), texte_color=(50,15,20))
     Bouton(scores, "Score", pos_y=mid_screen(1)+resize(150), back_color=(23,231,147), texte_color=(15,50,23))
-    Bouton(quitter_jeu, "Quitter", pos_y=mid_screen(1)+resize(250), back_color=(255,123,76), texte_color=(50,15,23), sound="game_loanch")
+    Bouton(quitter_jeu, "Quitter", pos_y=mid_screen(1)+resize(250), back_color=(255,123,76), texte_color=(50,15,23), sound="quit")
     # main loop du menu principale
     while True:
         for e in pygame.event.get():
@@ -88,7 +88,7 @@ def main_menu():
         
         # update affichage
         SCREEN.fill((54,57,63))
-        SCREEN.blit(main_menu_background, (0, 0-screen_size[1]//2.8))
+        SCREEN.blit(main_menu_background, (0, 0-screen_size[1]/2.8))
         pygame.mouse.set_cursor(0)
         # affichage des objets
         for object_ in Interact_Object.objects:
@@ -148,7 +148,7 @@ def select_mod():
 def affichage_para_vol():
     from fonctions.fonc import screen_pos
     back_rect = pygame.Rect(resize((1536 - 750) / 2), resize(100) + screen_pos, resize(750), resize(440))
-    pygame.draw.rect(SCREEN, (100,100,100), back_rect, 0, 20)
+    pygame.draw.rect(SCREEN, (55,37,54), back_rect, 0, 20)
     
     place_texte_1 = titre_font.size("Paramètres de volumes")
     texte_1 = titre_font.render("Paramètres de volumes", True, (200,200,255))
@@ -165,9 +165,9 @@ def parametre():
     Interact_Object.reset_objects()
 
     Bouton(main_menu, "BACK", back_color=(150,100,100), texte_color=(50,0,0), pos_x=resize(55), pos_y=resize(25), hauteur=40, largeur=100, taille_texte=30, sound="back")
-    tirette_global_volum = Tirette(init_valiu=int(volume["global_volume"]*10), pos_y=resize(265))
-    tirette_music_volum = Tirette(init_valiu=int(volume["music_volume"]*10), pos_y=resize(365))
-    tirette_sound_volum = Tirette(init_valiu=int(volume["sound_volume"]*10), pos_y=resize(465))
+    tirette_global_volum = Tirette(init_valiu=int(parametres["volume"]["global_volume"]*10), pos_y=resize(265))
+    tirette_music_volum = Tirette(init_valiu=int(parametres["volume"]["music_volume"]*10), pos_y=resize(365))
+    tirette_sound_volum = Tirette(init_valiu=int(parametres["volume"]["sound_volume"]*10), pos_y=resize(465))
 
     while True:
         for e in pygame.event.get():
@@ -178,21 +178,18 @@ def parametre():
             for object_ in Interact_Object.objects:
                 value = object_.interact(e)
                 if object_ is tirette_global_volum:
-                    volume["global_volume"] = float(value / 10)
                     parametres["volume"]["global_volume"] = float(value / 10)
                     lecture_fichier("parametres", "w", parametres)
-                    set_volum_music(volume["global_volume"] * volume["music_volume"])
-                    set_volum_sounds(volume["global_volume"] * volume["sound_volume"])
+                    set_volum_music(parametres["volume"]["global_volume"] * parametres["volume"]["music_volume"])
+                    set_volum_sounds(parametres["volume"]["global_volume"] * parametres["volume"]["sound_volume"])
                 elif object_ is tirette_music_volum:
-                    volume["music_volume"] = float(value / 10)
                     parametres["volume"]["music_volume"] = float(value / 10)
                     lecture_fichier("parametres", "w", parametres)
-                    set_volum_music(volume["global_volume"] * volume["music_volume"])
+                    set_volum_music(parametres["volume"]["global_volume"] * parametres["volume"]["music_volume"])
                 elif object_ is tirette_sound_volum:
-                    volume["sound_volume"] = float(value / 10)
                     parametres["volume"]["sound_volume"] = float(value / 10)
                     lecture_fichier("parametres", "w", parametres)
-                    set_volum_sounds(volume["global_volume"] * volume["sound_volume"])
+                    set_volum_sounds(parametres["volume"]["global_volume"] * parametres["volume"]["sound_volume"])
             
             if e.type == pygame.KEYDOWN:
                 if e.key == 27:
@@ -303,12 +300,10 @@ def nul():
     return
 
 parametres = lecture_fichier("parametres")
-volume = parametres["volume"]
-touches = parametres["touches"]
 
 stop_all_sound()
 play_music("main_menu", -1)
-set_volum_music(volume["global_volume"] * volume["music_volume"])
-set_volum_sounds(volume["global_volume"] * volume["sound_volume"])
+set_volum_music(parametres["volume"]["global_volume"] * parametres["volume"]["music_volume"])
+set_volum_sounds(parametres["volume"]["global_volume"] * parametres["volume"]["sound_volume"])
 
 main_menu()        

@@ -22,8 +22,8 @@ class Interact_Object():
     def __init__(self, pos_x, pos_y, hauteur, largeur, back_color, arrondissement):
         self.largeur = resize(largeur)
         self.hauteur = resize(hauteur)
-        self.pos_x = pos_x - self.largeur // 2
-        self.pos_y = pos_y - self.hauteur // 2
+        self.pos_x = pos_x - self.largeur / 2
+        self.pos_y = pos_y - self.hauteur / 2
         self.rectangle = pygame.Rect(self.pos_x, self.pos_y, self.largeur, self.hauteur)
         self.arrondisement = resize(arrondissement)
         self.back_color = back_color

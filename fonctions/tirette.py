@@ -18,29 +18,29 @@ class Tirette(Interact_Object):
         self.init_valiu = init_valiu
 
         self.eppesseur = resize(eppesseur)
-        self.start = int(round(self.pos_x + (self.largeur * 0.15), 0))
-        self.end = int(round(self.pos_x + (self.largeur * 0.85), 0))
-        self.trais_pos_y = (self.pos_y + self.hauteur // 2) - 1
+        self.start = self.pos_x + (self.largeur * 0.15)
+        self.end = self.pos_x + (self.largeur * 0.85)
+        self.trais_pos_y = (self.pos_y + self.hauteur / 2) - 1
         self.trait_color = trait_color
         self.longueur_trait = self.end - self.start
 
-        self.place_texte = self.start - (self.pos_x + self.hauteur // 4)
-        self.taille_texte = min(int(round(self.hauteur * 0.75, 0)), int(round(self.place_texte // len(str(self.valius[-1])) * 0.75, 0)))
+        self.place_texte = self.start - (self.pos_x + self.hauteur / 4)
+        self.taille_texte = min(int(round(self.hauteur * 0.75, 0)), int(round(self.place_texte / len(str(self.valius[-1])) * 0.75, 0)))
         self.font = pygame.font.SysFont(texte_font, self.taille_texte)
         self.texte_color = texte_color
 
-        self.deca_valiu = self.longueur_trait // (len(self.valius)-1)
+        self.deca_valiu = self.longueur_trait / (len(self.valius)-1)
 
         self.taille_boule = resize(taille_boule)
-        self.boule_pos_x = self.start - self.taille_boule // 2
-        self.boule_pos_y = (self.trais_pos_y + 1) - self.taille_boule // 2
+        self.boule_pos_x = self.start - self.taille_boule / 2
+        self.boule_pos_y = (self.trais_pos_y + 1) - self.taille_boule / 2
         self.boule = pygame.Rect(self.boule_pos_x, self.boule_pos_y, self.taille_boule, self.taille_boule)
         self.boule_color = boule_color
 
         # pos x = début + arrondi + moitier de la place disspo - moitier de la taille du texte
-        self.pos_x_texte_1 = self.pos_x + self.hauteur // 4 + self.place_texte // 2 - self.font.size(str(self.valius[0]))[0] // 2
-        self.pos_x_texte_2 = self.end + self.place_texte // 2 - self.font.size(str(self.valius[-1]))[0] // 2
-        self.pos_y_texte = self.pos_y + self.hauteur // 2 - self.font.size(str(self.valius[0]))[1] // 2
+        self.pos_x_texte_1 = self.pos_x + self.hauteur / 4 + self.place_texte / 2 - self.font.size(str(self.valius[0]))[0] / 2
+        self.pos_x_texte_2 = self.end + self.place_texte / 2 - self.font.size(str(self.valius[-1]))[0] / 2
+        self.pos_y_texte = self.pos_y + self.hauteur / 2 - self.font.size(str(self.valius[0]))[1] / 2
         self.texte_1 = self.font.render(str(self.valius[0]), True, self.texte_color)
         self.texte_2 = self.font.render(str(self.valius[-1]), True, self.texte_color)
 
@@ -50,14 +50,14 @@ class Tirette(Interact_Object):
         try: from fonctions.fonc import screen_pos
         except ModuleNotFoundError or ImportError: from fonc import screen_pos
         taille = self.font.size(str(self.init_valiu))
-        hauteur = taille[1] + taille[1] // 3
-        largeur = taille[0] + taille[1] // 1.5
-        y = self.pos_y - int(hauteur // 0.78)
-        x = self.boule_pos_x + self.deca_valiu * (self.init_valiu - self.valius[0]) + int(self.taille_boule // 2) - int(largeur // 2)
+        hauteur = taille[1] + taille[1] / 3
+        largeur = taille[0] + taille[1] / 1.5
+        y = self.pos_y - hauteur / 0.78
+        x = self.boule_pos_x + self.deca_valiu * (self.init_valiu - self.valius[0]) + self.taille_boule / 2 - largeur / 2
         self.rectangle_indic = pygame.Rect(x, y + screen_pos, largeur, hauteur)
         self.texte_indic = self.font.render(str(self.init_valiu), True, self.texte_color)
-        self.pos_texte_indic_x = x + int(largeur // 2) - int(taille[0] // 2)
-        self.pos_texte_indic_y = y + int(hauteur // 2) - int(taille[1] // 2) + screen_pos
+        self.pos_texte_indic_x = x + largeur / 2 - taille[0] / 2
+        self.pos_texte_indic_y = y + hauteur / 2 - taille[1] / 2 + screen_pos
 
 
     def affichage(self):
@@ -103,5 +103,5 @@ class Tirette(Interact_Object):
                 if self.init_valiu < self.valius[0]: self.init_valiu = self.valius[0]
                 elif self.init_valiu > self.valius[-1]: self.init_valiu = self.valius[-1]
         if value != self.init_valiu:
-            play_sound("move")
+            play_sound("cursor1")
         return self.init_valiu
