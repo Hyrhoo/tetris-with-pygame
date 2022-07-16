@@ -147,7 +147,7 @@ def select_mod():
 
 def affichage_para_vol():
     from fonctions.fonc import screen_pos
-    back_rect = pygame.Rect(resize((1536 - 750) / 2), resize(100) + screen_pos, resize(750), resize(440))
+    back_rect = pygame.Rect(resize((1536 - 750) / 2), resize(100) + screen_pos, resize(750), resize(430))
     pygame.draw.rect(SCREEN, (55,37,54), back_rect, 0, 20)
     
     place_texte_1 = titre_font.size("Paramètres de volumes")
@@ -163,13 +163,17 @@ def affichage_para_vol():
 
 def affichage_para_control():
     from fonctions.fonc import screen_pos
-    back_rect = pygame.Rect(resize((1536 - 750) / 2), resize(600) + screen_pos, resize(750), resize(440))
+    back_rect = pygame.Rect(resize((1536 - 750) / 2), resize(600) + screen_pos, resize(750), resize(470))
     pygame.draw.rect(SCREEN, (55,37,54), back_rect, 0, 20)
 
     place_texte_1 = titre_font.size("Controles")
     texte_1 = titre_font.render("Controles", True, (200,200,255))
-
     SCREEN.blit(texte_1, (mid_screen(0) - place_texte_1[0] / 2, resize(630) + screen_pos))
+
+    keys = list(parametres["touches"].keys())
+    for i in range(len(keys)):
+        texte = menu_font.render(keys[i], True, (200,200,255))
+        SCREEN.blit(texte, (resize((1536 - 650) / 2), resize(700 + 50 * i) + screen_pos))
 
 def parametre():
     reset_scroll()
@@ -210,7 +214,7 @@ def parametre():
                 print(e)
 
             if e.type == pygame.MOUSEBUTTONDOWN:
-                derouler_screen(0, 1140, e)
+                derouler_screen(0, 1170, e)
         
         # update affichage
         SCREEN.fill((54,57,63))

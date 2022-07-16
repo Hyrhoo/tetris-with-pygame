@@ -5,31 +5,31 @@
     "sound_volume": 0.5
   },
   "touches": {
-    "chute instantané": [
+    "Chute instantané": [
       122,
       "z"
     ],
-    "chute rapide": [
+    "Chute rapide": [
       115,
       "s"
     ],
-    "deplacement à droit": [
+    "Déplacement à droit": [
       113,
       "q"
     ],
-    "deplacement à gauche": [
+    "Déplacement à gauche": [
       100,
       "d"
     ],
-    "rotation horair": [
+    "Rotation horair": [
       107,
       "k"
     ],
-    "rotation anti-horair": [
+    "Rotation anti-horair": [
       109,
       "m"
     ],
-    "reserve": [
+    "Réserve": [
       32,
       " "
     ]
