@@ -72,6 +72,9 @@ def derouler_screen(haut, bas, e):
     """
     global screen_pos
     scroll = resize(30)
+    bas -= 864
+    if bas < haut:
+        bas = haut
     if e.button == 4:
         screen_pos += scroll
         if screen_pos > - haut:

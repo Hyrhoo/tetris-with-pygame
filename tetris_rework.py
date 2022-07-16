@@ -84,7 +84,7 @@ def main_menu():
                 print(e)
 
             if e.type == pygame.MOUSEBUTTONDOWN:
-                derouler_screen(0, 0, e)
+                derouler_screen(0, 864, e)
         
         # update affichage
         SCREEN.fill((54,57,63))
@@ -130,7 +130,7 @@ def select_mod():
                 print(e)
 
             if e.type == pygame.MOUSEBUTTONDOWN:
-                derouler_screen(0, 0, e)
+                derouler_screen(0, 864, e)
         
         # update affichage
         SCREEN.fill((54,57,63))
@@ -155,10 +155,21 @@ def affichage_para_vol():
     texte_2 = menu_font.render("Volume générale :", True, (200,200,255))
     texte_3 = menu_font.render("Volume musique :", True, (200,200,255))
     texte_4 = menu_font.render("Volume éffets sonnors :", True, (200,200,255))
+
     SCREEN.blit(texte_1, (mid_screen(0) - place_texte_1[0] / 2, resize(130) + screen_pos))
     SCREEN.blit(texte_2, (resize((1536 - 650) / 2), resize(200) + screen_pos))
     SCREEN.blit(texte_3, (resize((1536 - 650) / 2), resize(300) + screen_pos))
     SCREEN.blit(texte_4, (resize((1536 - 650) / 2), resize(400) + screen_pos))
+
+def affichage_para_control():
+    from fonctions.fonc import screen_pos
+    back_rect = pygame.Rect(resize((1536 - 750) / 2), resize(600) + screen_pos, resize(750), resize(440))
+    pygame.draw.rect(SCREEN, (55,37,54), back_rect, 0, 20)
+
+    place_texte_1 = titre_font.size("Controles")
+    texte_1 = titre_font.render("Controles", True, (200,200,255))
+
+    SCREEN.blit(texte_1, (mid_screen(0) - place_texte_1[0] / 2, resize(630) + screen_pos))
 
 def parametre():
     reset_scroll()
@@ -199,12 +210,13 @@ def parametre():
                 print(e)
 
             if e.type == pygame.MOUSEBUTTONDOWN:
-                derouler_screen(0, 100, e)
+                derouler_screen(0, 1140, e)
         
         # update affichage
         SCREEN.fill((54,57,63))
         SCREEN.blit(parametres_background, (0,0))
         affichage_para_vol()
+        affichage_para_control()
         pygame.mouse.set_cursor(0)
         # affichage des objets
         for object_ in Interact_Object.objects:
@@ -238,7 +250,7 @@ def maps():
                 print(e)
 
             if e.type == pygame.MOUSEBUTTONDOWN:
-                derouler_screen(0, 0, e)
+                derouler_screen(0, 864, e)
         
         # update affichage
         SCREEN.fill((54,57,63))
@@ -276,7 +288,7 @@ def scores():
                 print(e)
 
             if e.type == pygame.MOUSEBUTTONDOWN:
-                derouler_screen(0, 100, e)
+                derouler_screen(0, 964, e)
         
         # update affichage
         SCREEN.fill((54,57,63))
