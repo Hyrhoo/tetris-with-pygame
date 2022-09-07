@@ -19,7 +19,9 @@ def calcule_multi_reso(screen_size):
     """
     diff_x = screen_size[0]/1536
     diff_y = screen_size[1]/864
-    return min(diff_x, diff_y)
+    rasio = min(diff_x, diff_y)
+    print(rasio)
+    return rasio
 
 from json import load, dump
 try:import pygame
@@ -50,8 +52,8 @@ def lecture_fichier(fichier, metod = "r", donner = None):
 def resize(valiu: int):
     return int(round(valiu * MULTI_RESO, 0))
 
-def mid_screen(valiu: int, divi: int = 2):
-    mid = int(round(screen_size[valiu] / divi, 0))
+def mid_screen(value: int, divi: int = 2):
+    mid = int(round(screen_size[value] / divi, 0))
     return mid
 
 def reset_scroll():
@@ -71,7 +73,7 @@ def derouler_screen(haut, bas, e):
     :doc-author: Trelent
     """
     global screen_pos
-    scroll = resize(30)
+    scroll = resize(50)
     bas -= 864
     if bas < haut:
         bas = haut

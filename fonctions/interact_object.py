@@ -19,7 +19,7 @@ class Interact_Object():
     objects = []
     select = -1
 
-    def __init__(self, pos_x, pos_y, hauteur, largeur, back_color, arrondissement):
+    def __init__(self, pos_x, pos_y, hauteur, largeur, back_color, arrondissement, scroll):
         self.largeur = resize(largeur)
         self.hauteur = resize(hauteur)
         self.pos_x = pos_x - self.largeur / 2
@@ -29,10 +29,12 @@ class Interact_Object():
         self.back_color = back_color
         self.init_back_color = back_color
         self.sound_play = False
+        self.scroll = scroll
 
     def objetc_survol(self):
         try: from fonctions.fonc import screen_pos
         except ModuleNotFoundError or ImportError: from fonc import screen_pos
+        if not self.scroll: screen_pos = 0
         survoler = False
         self.rectangle.y += screen_pos
         if self.rectangle.collidepoint(pygame.mouse.get_pos()):

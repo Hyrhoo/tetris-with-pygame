@@ -67,9 +67,9 @@ def init_music(folder, extention):
     test_folder("back",        folder, "/menu/back", extention)
     test_folder("select",      folder, "/menu/select", extention)
     test_folder("cursor",      folder, "/menu/cursor", extention)
-    test_folder("cursor1",      folder, "/menu/cursor1", extention)
+    test_folder("cursor1",     folder, "/menu/cursor1", extention)
     test_folder("game_loanch", folder, "/menu/game_loanch", extention)
-    test_folder("quit", folder, "/menu/quit", extention)
+    test_folder("quit",        folder, "/menu/quit", extention)
     test_folder("pause",       folder, "/menu/pause", extention)
 
 

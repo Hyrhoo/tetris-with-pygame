@@ -12,8 +12,8 @@ except ModuleNotFoundError or ImportError:
 
 class Tirette(Interact_Object):
 
-    def __init__(self, valiu = (0,10), init_valiu = 0, pos_x = mid_screen(0), pos_y = mid_screen(1), hauteur = 40, largeur = 400, eppesseur = 3, taille_boule = 20, texte_font = "franklin gothic heavy", texte_color = (150,150,150), back_color = (50,50,50), boule_color = (255,255,255), trait_color = (100,100,100), arrondissement = 100000):
-        Interact_Object.__init__(self, pos_x, pos_y, hauteur, largeur, back_color, arrondissement)
+    def __init__(self, valiu = (0,10), init_valiu = 0, pos_x = mid_screen(0), pos_y = mid_screen(1), hauteur = 40, largeur = 400, eppesseur = 3, taille_boule = 20, texte_font = "franklin gothic heavy", texte_color = (150,150,150), back_color = (50,50,50), boule_color = (255,255,255), trait_color = (100,100,100), arrondissement = 100000, scroll = True):
+        Interact_Object.__init__(self, pos_x, pos_y, hauteur, largeur, back_color, arrondissement, scroll)
         self.valius = range(valiu[0], valiu[1]+1)
         self.init_valiu = init_valiu
 
@@ -44,9 +44,19 @@ class Tirette(Interact_Object):
         self.texte_1 = self.font.render(str(self.valius[0]), True, self.texte_color)
         self.texte_2 = self.font.render(str(self.valius[-1]), True, self.texte_color)
 
+        self.selection = False
         Interact_Object.objects.append(self)
 
     def calcul_indication(self):
+        """
+        The calcul_indication function calculates the position of the indication text.
+        It takes as arguments self, which is a slider object, and screen_pos which is an int that represents 
+        the position of the top left corner of the screen in pixels. It returns nothing.
+        
+        :param self: Access the attributes and methods of the class in python
+        :return: The rectangle where the indication is displayed and its position
+        :doc-author: Trelent
+        """
         try: from fonctions.fonc import screen_pos
         except ModuleNotFoundError or ImportError: from fonc import screen_pos
         taille = self.font.size(str(self.init_valiu))
@@ -61,6 +71,17 @@ class Tirette(Interact_Object):
 
 
     def affichage(self):
+        """
+        The affichage function is the function that will be called to display the slider.
+        It is composed of several parts:
+            - First, it will draw a rectangle with a color depending on the back_color variable.
+            - Then, it will draw another rectangle inside of the first one with an other color (the second one). This new rectangle has an opacity of 15% and is used to make a &quot;shadow&quot; effect. 
+            - After that, it draws two texts in different colors depending on their variables : self.texte_2 for text 2 and self.texte_3 for text 3 (they are both centered
+        
+        :param self: Access variables that belongs to the class
+        :return: The display of the slider
+        :doc-author: Trelent
+        """
         try: from fonctions.fonc import screen_pos
         except ModuleNotFoundError or ImportError: from fonc import screen_pos
         self.rectangle.y += screen_pos
@@ -80,7 +101,7 @@ class Tirette(Interact_Object):
     
     def detect_survole(self):
         survoler = self.objetc_survol()
-        if survoler:
+        if survoler or self.selection:
             self.calcul_indication()
             pygame.draw.rect(SCREEN, self.init_back_color, self.rectangle_indic, 0 , resize(10))
             pygame.draw.rect(SCREEN, changer_couleur_100(self.init_back_color, 15), self.rectangle_indic, resize(3) , resize(10))
@@ -89,11 +110,14 @@ class Tirette(Interact_Object):
     def interact(self, event):
         survoler = self.objetc_survol()
         value = self.init_valiu
-        if pygame.mouse.get_pressed()[0]:
-                if survoler:
-                    self.init_valiu = int(round((pygame.mouse.get_pos()[0] - self.start) / self.deca_valiu, 0))
-                    if self.init_valiu < self.valius[0]: self.init_valiu = self.valius[0]
-                    elif self.init_valiu > self.valius[-1]: self.init_valiu = self.valius[-1]
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and survoler: self.selection = True
+        if event.type == pygame.MOUSEBUTTONUP and event.button == 1: self.selection = False
+        #if pygame.mouse.get_pressed()[0]:
+        #    if survoler:
+        if self.selection:
+                self.init_valiu = int(round((pygame.mouse.get_pos()[0] - self.start) / self.deca_valiu, 0))
+                if self.init_valiu < self.valius[0]: self.init_valiu = self.valius[0]
+                elif self.init_valiu > self.valius[-1]: self.init_valiu = self.valius[-1]
         if event.type == pygame.KEYDOWN:
             if survoler:
                 if event.key == pygame.K_RIGHT:

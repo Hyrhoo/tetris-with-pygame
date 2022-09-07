@@ -12,6 +12,7 @@ from unicodedata import decimal
 from fonctions.bouton import *
 from fonctions.tirette import *
 
+annonce_font = pygame.font.SysFont("franklin gothic heavy", resize(50))
 titre_font = pygame.font.SysFont("franklin gothic heavy", resize(40))
 menu_font = pygame.font.SysFont("franklin gothic heavy", resize(25))
 
@@ -69,7 +70,7 @@ def main_menu():
     while True:
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
-                play_sound("game_loanch")
+                play_sound("quit")
                 quitter_jeu()
 
             # gestion de la pression des boutons
@@ -78,7 +79,7 @@ def main_menu():
 
             if e.type == pygame.KEYDOWN:
                 if e.key == 27:
-                    play_sound("game_loanch")
+                    play_sound("quit")
                     quitter_jeu()
                 Interact_Object.deplacer_cursor(e)
                 print(e)
@@ -97,18 +98,18 @@ def main_menu():
         pygame.display.flip()
         
         # set fps
-        clock.tick(60)
+        clock.tick(FPS)
 
 def select_mod():
     reset_scroll()
     Interact_Object.reset_objects()
 
-    Bouton(main_menu, "BACK", back_color=(150,100,100), texte_color=(50,0,0), pos_x=resize(55), pos_y=resize(25), hauteur=40, largeur=100, taille_texte=30, sound="back")
+    Bouton(main_menu, "BACK", back_color=(150,100,100), texte_color=(50,0,0), pos_x=resize(55), pos_y=resize(25), hauteur=40, largeur=100, taille_texte=30, sound="back", scroll=False)
 
-    Bouton(nul, "mode libre", pos_y=mid_screen(1)-resize(350), largeur=300, back_color=(175,215,54), texte_color=(40,50,15), sound="game_loanch")
-    Bouton(nul, "40 lignes", pos_y=mid_screen(1)-resize(200), largeur=300, back_color=(215,198,54), texte_color=(50,45,15), sound="game_loanch")
-    Bouton(nul, "150 lignes", pos_y=mid_screen(1)-resize(100), largeur=300, back_color=(234,173,52), texte_color=(62,40,12), sound="game_loanch")
-    Bouton(nul, "300 lignes", pos_y=mid_screen(1), largeur=300, back_color=(255,129,32), texte_color=(73,32,7), sound="game_loanch")
+    Bouton(nul, "Mode Libre", pos_y=mid_screen(1)-resize(350), largeur=300, back_color=(175,215,54), texte_color=(40,50,15), sound="game_loanch")
+    Bouton(nul, "40 Lignes", pos_y=mid_screen(1)-resize(200), largeur=300, back_color=(215,198,54), texte_color=(50,45,15), sound="game_loanch")
+    Bouton(nul, "150 Lignes", pos_y=mid_screen(1)-resize(100), largeur=300, back_color=(234,173,52), texte_color=(62,40,12), sound="game_loanch")
+    Bouton(nul, "300 Lignes", pos_y=mid_screen(1), largeur=300, back_color=(255,129,32), texte_color=(73,32,7), sound="game_loanch")
     Bouton(nul, "1min (60s)", pos_y=mid_screen(1)+resize(150), largeur=300, back_color=(215,198,54), texte_color=(50,45,15), sound="game_loanch")
     Bouton(nul, "2min 30 (150s)", pos_y=mid_screen(1)+resize(250), largeur=300, back_color=(234,173,52), texte_color=(62,40,12), sound="game_loanch")
     Bouton(nul, "5min (300s)", pos_y=mid_screen(1)+resize(350), largeur=300, back_color=(255,129,32), texte_color=(73,32,7), sound="game_loanch")
@@ -116,7 +117,7 @@ def select_mod():
     while True:
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
-                play_sound("game_loanch")
+                play_sound("quit")
                 quitter_jeu()
         
             for object_ in Interact_Object.objects:
@@ -150,7 +151,7 @@ def affichage_para_vol():
     back_rect = pygame.Rect(resize((1536 - 750) / 2), resize(100) + screen_pos, resize(750), resize(430))
     pygame.draw.rect(SCREEN, (55,37,54), back_rect, 0, 20)
     
-    place_texte_1 = titre_font.size("Paramètres de volumes")
+    place_texte_1 = titre_font.size("Paramètres Sonore")
     texte_1 = titre_font.render("Paramètres de volumes", True, (200,200,255))
     texte_2 = menu_font.render("Volume générale :", True, (200,200,255))
     texte_3 = menu_font.render("Volume musique :", True, (200,200,255))
@@ -160,6 +161,18 @@ def affichage_para_vol():
     SCREEN.blit(texte_2, (resize((1536 - 650) / 2), resize(200) + screen_pos))
     SCREEN.blit(texte_3, (resize((1536 - 650) / 2), resize(300) + screen_pos))
     SCREEN.blit(texte_4, (resize((1536 - 650) / 2), resize(400) + screen_pos))
+
+def save_para_vol():
+    lecture_fichier("parametres", "w", parametres)
+    set_volum_music(parametres["volume"]["global_volume"] * parametres["volume"]["music_volume"])
+    set_volum_sounds(parametres["volume"]["global_volume"] * parametres["volume"]["sound_volume"])
+
+def get_touche_name(key, value):
+    try:
+        name = EQUIVALENT_TOUCHES[key]
+    except:
+        name = value
+    return name.capitalize()
 
 def affichage_para_control():
     from fonctions.fonc import screen_pos
@@ -175,36 +188,72 @@ def affichage_para_control():
         texte = menu_font.render(keys[i], True, (200,200,255))
         SCREEN.blit(texte, (resize((1536 - 650) / 2), resize(700 + 50 * i) + screen_pos))
 
+def changer_touche():
+    #from tetris_rework import parametres
+    pygame.mouse.set_cursor(0)
+    Clock = pygame.time.Clock()
+    
+    rect = pygame.Rect(mid_screen(0) - resize(350), mid_screen(1) - resize(70), resize(700), resize(140))
+    pygame.draw.rect(SCREEN, (50, 50, 50), rect, 0, resize(20))
+    pygame.draw.rect(SCREEN, changer_couleur_100((50,50,50), 15), rect, resize(5), resize(20))
+    
+    place_texte = annonce_font.size("Appuyiez Sur Une Touche")
+    texte = annonce_font.render("Appuyiez Sur Une Touche", True, (200, 255, 255))
+    SCREEN.blit(texte, (mid_screen(0) - place_texte[0] / 2, mid_screen(1) - place_texte[1] / 2))
+    
+    pygame.display.flip()
+    touche = None
+    while touche is None:
+        for e in pygame.event.get():
+            if e.type == pygame.KEYDOWN:
+                touche = [e.key, e.unicode]
+        Clock.tick(FPS)
+    play_sound("pause")
+    return touche
+    if touche not in TOUCHES_INTERDITE :#and touche not in parametres["touches"]:
+        return touche
+
 def parametre():
     reset_scroll()
     Interact_Object.reset_objects()
 
-    Bouton(main_menu, "BACK", back_color=(150,100,100), texte_color=(50,0,0), pos_x=resize(55), pos_y=resize(25), hauteur=40, largeur=100, taille_texte=30, sound="back")
+    Bouton(main_menu, "BACK", back_color=(150,100,100), texte_color=(50,0,0), pos_x=resize(55), pos_y=resize(25), hauteur=40, largeur=100, taille_texte=30, sound="back", scroll=False)
     tirette_global_volum = Tirette(init_valiu=int(parametres["volume"]["global_volume"]*10), pos_y=resize(265))
     tirette_music_volum = Tirette(init_valiu=int(parametres["volume"]["music_volume"]*10), pos_y=resize(365))
     tirette_sound_volum = Tirette(init_valiu=int(parametres["volume"]["sound_volume"]*10), pos_y=resize(465))
+    touche = parametres["touches"]["Chute instantané"]
+    touche_chute_instant = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(720), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
+    touche = parametres["touches"]["Chute rapide"]
+    touche_chute_rapid = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(768), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
+    touche = parametres["touches"]["Déplacement à droit"]
+    touche_dep_r = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(816), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
+    touche = parametres["touches"]["Déplacement à gauche"]
+    touche_dep_l = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(864), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
+    touche = parametres["touches"]["Rotation horair"]
+    touche_r_h = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(912), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
+    touche = parametres["touches"]["Rotation anti-horair"]
+    touche_r_ah = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(960), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
+    touche = parametres["touches"]["Réserve"]
+    touche_res = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(1008), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
+    #Touches(changer_touche, touche[0], touche[1], "Chute instantané")
 
     while True:
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
-                play_sound("game_loanch")
+                play_sound("quit")
                 quitter_jeu()
         
             for object_ in Interact_Object.objects:
                 value = object_.interact(e)
                 if object_ is tirette_global_volum:
                     parametres["volume"]["global_volume"] = float(value / 10)
-                    lecture_fichier("parametres", "w", parametres)
-                    set_volum_music(parametres["volume"]["global_volume"] * parametres["volume"]["music_volume"])
-                    set_volum_sounds(parametres["volume"]["global_volume"] * parametres["volume"]["sound_volume"])
+                    save_para_vol()
                 elif object_ is tirette_music_volum:
                     parametres["volume"]["music_volume"] = float(value / 10)
-                    lecture_fichier("parametres", "w", parametres)
-                    set_volum_music(parametres["volume"]["global_volume"] * parametres["volume"]["music_volume"])
+                    save_para_vol()
                 elif object_ is tirette_sound_volum:
                     parametres["volume"]["sound_volume"] = float(value / 10)
-                    lecture_fichier("parametres", "w", parametres)
-                    set_volum_sounds(parametres["volume"]["global_volume"] * parametres["volume"]["sound_volume"])
+                    save_para_vol()
             
             if e.type == pygame.KEYDOWN:
                 if e.key == 27:
@@ -235,12 +284,12 @@ def maps():
     reset_scroll()
     Interact_Object.reset_objects()
 
-    Bouton(main_menu, "BACK", back_color=(150,100,100), texte_color=(50,0,0), pos_x=resize(55), pos_y=resize(25), hauteur=40, largeur=100, taille_texte=30, sound="back")
+    Bouton(main_menu, "BACK", back_color=(150,100,100), texte_color=(50,0,0), pos_x=resize(55), pos_y=resize(25), hauteur=40, largeur=100, taille_texte=30, sound="back", scroll=False)
 
     while True:
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
-                play_sound("game_loanch")
+                play_sound("quit")
                 quitter_jeu()
         
             for object_ in Interact_Object.objects:
@@ -273,12 +322,12 @@ def scores():
     reset_scroll()
     Interact_Object.reset_objects()
 
-    Bouton(main_menu, "BACK", back_color=(150,100,100), texte_color=(50,0,0), pos_x=resize(55), pos_y=resize(25), hauteur=40, largeur=100, taille_texte=30, sound="back")
+    Bouton(main_menu, "BACK", back_color=(150,100,100), texte_color=(50,0,0), pos_x=resize(55), pos_y=resize(25), hauteur=40, largeur=100, taille_texte=30, sound="back", scroll=False)
 
     while True:
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
-                play_sound("game_loanch")
+                play_sound("quit")
                 quitter_jeu()
         
             for object_ in Interact_Object.objects:
@@ -308,7 +357,13 @@ def scores():
         clock.tick(FPS)
 
 def quitter_jeu():
-    pygame.time.wait(550)
+    pygame.mouse.set_cursor(0)
+    stop_all_sound()
+    play_sound("quit")
+    time = int(sounds["quit"].get_length() * 1000)
+    pygame.mixer.fadeout(time)
+    pygame.mixer.music.fadeout(time)
+    pygame.time.wait(time)
     pygame.quit()
     sys.exit()
 
@@ -322,4 +377,45 @@ play_music("main_menu", -1)
 set_volum_music(parametres["volume"]["global_volume"] * parametres["volume"]["music_volume"])
 set_volum_sounds(parametres["volume"]["global_volume"] * parametres["volume"]["sound_volume"])
 
-main_menu()        
+try:
+    main_menu()        
+except RecursionError:
+    stop_all_sound()
+    pygame.mixer.music.stop()
+    pygame.mouse.set_cursor(0)
+    smilet_font = pygame.font.SysFont("Segoe UI", resize(170))
+    info_font = pygame.font.SysFont("Segoe UI", resize(35))
+    error_font = pygame.font.SysFont("Segoe UI", resize(15))
+
+    Clock = pygame.time.Clock()
+    nbr = 10
+    while nbr:
+        for e in pygame.event.get():
+            if e.type == pygame.KEYDOWN:
+                if e.key == 13:
+                    nbr -= 1
+        
+        SCREEN.fill((0, 120, 215))
+        
+        smilet = smilet_font.render(":(", True, (255,255,255))
+        error_1 = info_font.render("Votre PC a rencontré une erreur et doit redémarrer.", True, (255,255,255))
+        error_2 = info_font.render("Nous faisons notre possible pour récupéré les", True, (255,255,255))
+        error_3 = info_font.render("information à propos de cette erreur.", True, (255,255,255))
+        pourcent = info_font.render("20 % achevé", True, (255, 255, 255))
+        error_5 = error_font.render("Erreur : Vous avez passé trop de temps à jouer et avez (peut être) trop joué avec les menus.", True, (255, 255, 255))
+        error_6 = error_font.render("Vous devez arrêter de jouer et profiter un peu du reste de votre vie.", True, (255, 255, 255))
+        error_7 = error_font.render("Cette erreur n'est pas sensée arriver en temps normal, merci de bien vouloir arrêter de jouer avec les menus.", True, (255, 255, 255))
+        lien = error_font.render("pour plus d'informations complémentaires, merci de consulter https://www.tetris.error.org", True, (255, 255, 255))
+
+        SCREEN.blit(smilet, (resize(150), resize(70)))
+        SCREEN.blit(error_1, (resize(150), resize(300)))
+        SCREEN.blit(error_2, (resize(150), resize(350)))
+        SCREEN.blit(error_3, (resize(150), resize(400)))
+        SCREEN.blit(pourcent, (resize(150), resize(490)))
+        SCREEN.blit(error_5, (resize(150), resize(600)))
+        SCREEN.blit(error_6, (resize(150), resize(620)))
+        SCREEN.blit(error_7, (resize(150), resize(640)))
+        SCREEN.blit(lien, (resize(150), resize(700)))
+        
+        pygame.display.flip()
+        Clock.tick(25)

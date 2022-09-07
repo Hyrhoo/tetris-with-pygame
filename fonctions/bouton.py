@@ -19,7 +19,7 @@ class Bouton(Interact_Object):
     est selectionner par le clavier, si le bouton est presser ...
     """
 
-    def __init__(self, fonc, texte = "",  pos_x = mid_screen(0), pos_y = mid_screen(1), hauteur = 70, largeur = 280, taille_texte = 40, texte_font = "franklin gothic heavy", texte_color = (255,255,255), back_color = (50,50,50), arrondissement = 100000, sound = "select"):
+    def __init__(self, fonc, texte = "",  pos_x = mid_screen(0), pos_y = mid_screen(1), hauteur = 70, largeur = 280, taille_texte = 40, texte_font = "franklin gothic heavy", texte_color = (255,255,255), back_color = (50,50,50), arrondissement = 100000, sound = "select", scroll = True):
         """
         The __init__ function is called automatically every time the class is being used to create a new object.
         The __init__ function can have arguments, some of which are defaulted (e.g., self). 
@@ -44,7 +44,7 @@ class Bouton(Interact_Object):
         :return: ?
         :doc-author: Trelent
         """
-        Interact_Object.__init__(self, pos_x, pos_y, hauteur, largeur, back_color, arrondissement)
+        Interact_Object.__init__(self, pos_x, pos_y, hauteur, largeur, back_color, arrondissement, scroll)
         # initialisation du texte du bouton
         self.texte = texte
         self.taille_texte = resize(taille_texte)
@@ -57,6 +57,7 @@ class Bouton(Interact_Object):
         self.deca = ((self.largeur - self.emplacement_texte[0]) / 2, (self.hauteur - self.emplacement_texte[1]) / 2)
         self.sound = sound
         self.fonc = fonc
+
         Interact_Object.objects.append(self)
     
     def affichage(self):
@@ -71,6 +72,7 @@ class Bouton(Interact_Object):
         """
         try: from fonctions.fonc import screen_pos
         except ModuleNotFoundError or ImportError: from fonc import screen_pos
+        if not self.scroll: screen_pos = 0
         self.emplacement_texte = self.font.size(self.texte)
         self.deca = ((self.largeur - self.emplacement_texte[0]) / 2, (self.hauteur - self.emplacement_texte[1]) / 2)
         self.rectangle.y += screen_pos
