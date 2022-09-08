@@ -14,12 +14,12 @@
       "s"
     ],
     "Déplacement à droit": [
-      113,
-      "q"
-    ],
-    "Déplacement à gauche": [
       100,
       "d"
+    ],
+    "Déplacement à gauche": [
+      113,
+      "q"
     ],
     "Rotation horair": [
       107,

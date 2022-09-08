@@ -5,6 +5,7 @@ Created on Wed Jun  8 08:08:28 2022
 @author: Hyrhoo
 """
 
+from operator import index
 import sys
 import random
 from unicodedata import decimal
@@ -213,6 +214,16 @@ def changer_touche():
     if touche not in TOUCHES_INTERDITE :#and touche not in parametres["touches"]:
         return touche
 
+def changer_para_touche(touche, nouv_touche, nom):
+    texte = get_touche_name(touche[0], touche[1])
+    if nouv_touche[0] not in TOUCHES_INTERDITE:
+        print("pas interdi")
+        parametres["touches"][nom] = nouv_touche
+        texte = get_touche_name(nouv_touche[0], nouv_touche[1])
+        lecture_fichier("parametres", "w", parametres)
+    return texte
+
+
 def parametre():
     reset_scroll()
     Interact_Object.reset_objects()
@@ -222,20 +233,20 @@ def parametre():
     tirette_music_volum = Tirette(init_valiu=int(parametres["volume"]["music_volume"]*10), pos_y=resize(365))
     tirette_sound_volum = Tirette(init_valiu=int(parametres["volume"]["sound_volume"]*10), pos_y=resize(465))
     touche = parametres["touches"]["Chute instantané"]
-    touche_chute_instant = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(720), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
+    touches = [None,]*8
+    touches[0] = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(720), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
     touche = parametres["touches"]["Chute rapide"]
-    touche_chute_rapid = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(768), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
+    touches[1] = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(768), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
     touche = parametres["touches"]["Déplacement à droit"]
-    touche_dep_r = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(816), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
+    touches[2] = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(816), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
     touche = parametres["touches"]["Déplacement à gauche"]
-    touche_dep_l = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(864), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
+    touches[3] = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(864), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
     touche = parametres["touches"]["Rotation horair"]
-    touche_r_h = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(912), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
+    touches[4] = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(912), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
     touche = parametres["touches"]["Rotation anti-horair"]
-    touche_r_ah = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(960), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
+    touches[5] = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(960), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
     touche = parametres["touches"]["Réserve"]
-    touche_res = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(1008), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
-    #Touches(changer_touche, touche[0], touche[1], "Chute instantané")
+    touches[6] = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(1008), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
 
     while True:
         for e in pygame.event.get():
@@ -254,6 +265,11 @@ def parametre():
                 elif object_ is tirette_sound_volum:
                     parametres["volume"]["sound_volume"] = float(value / 10)
                     save_para_vol()
+                if object_ in touches and type(value) == list:
+                    print(value)
+                    nom = noms_touches[touches.index(object_)]
+                    texte = changer_para_touche(parametres["touches"][nom], value, nom)
+                    object_.texte = texte
             
             if e.type == pygame.KEYDOWN:
                 if e.key == 27:
@@ -371,6 +387,7 @@ def nul():
     return
 
 parametres = lecture_fichier("parametres")
+noms_touches = ["Chute instantané", "Chute rapide", "Déplacement à droit", "Déplacement à gauche", "Rotation horair", "Rotation anti-horair", "Réserve"]
 
 stop_all_sound()
 play_music("main_menu", -1)
@@ -399,7 +416,7 @@ except RecursionError:
         
         smilet = smilet_font.render(":(", True, (255,255,255))
         error_1 = info_font.render("Votre PC a rencontré une erreur et doit redémarrer.", True, (255,255,255))
-        error_2 = info_font.render("Nous faisons notre possible pour récupéré les", True, (255,255,255))
+        error_2 = info_font.render("Nous faisons notre possible pour récupérer les", True, (255,255,255))
         error_3 = info_font.render("information à propos de cette erreur.", True, (255,255,255))
         pourcent = info_font.render("20 % achevé", True, (255, 255, 255))
         error_5 = error_font.render("Erreur : Vous avez passé trop de temps à jouer et avez (peut être) trop joué avec les menus.", True, (255, 255, 255))
@@ -418,4 +435,4 @@ except RecursionError:
         SCREEN.blit(lien, (resize(150), resize(700)))
         
         pygame.display.flip()
-        Clock.tick(25)
+        Clock.tick(10)
