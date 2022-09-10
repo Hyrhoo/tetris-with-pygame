@@ -149,7 +149,7 @@ def affichage_para_vol():
     pygame.draw.rect(SCREEN, (55,37,54), back_rect, 0, 20)
     
     place_texte_1 = titre_font.size("Paramètres Sonore")
-    texte_1 = titre_font.render("Paramètres de volumes", True, (200,200,255))
+    texte_1 = titre_font.render("Paramètres Sonore", True, (200,200,255))
     texte_2 = menu_font.render("Volume générale :", True, (200,200,255))
     texte_3 = menu_font.render("Volume musique :", True, (200,200,255))
     texte_4 = menu_font.render("Volume éffets sonnors :", True, (200,200,255))
@@ -369,8 +369,8 @@ def scores():
 
 def ask_quitte():
     Interact_Object.reset_objects()
-    Bouton(quitter_jeu, "Oui", pos_y=mid_screen(1) - resize(50), back_color=(255,123,76), texte_color=(50,15,23), sound="quit")
-    Bouton(main_menu, "Non", pos_y=mid_screen(1) + resize(50), back_color=(23,231,147), texte_color=(15,50,23), sound="back")
+    Bouton(quitter_jeu, "Oui", pos_y=mid_screen(1) - resize(10), hauteur=100, largeur=250, taille_texte=60, back_color=(255,123,76), texte_color=(50,15,23), arrondissement=40, sound="quit")
+    Bouton(main_menu, "Non", pos_y=mid_screen(1) + resize(110), hauteur=100, largeur=250, taille_texte=60, back_color=(23,231,147), texte_color=(15,50,23), arrondissement=40, sound="back")
     Clock = pygame.time.Clock()
     menu = True
     while menu:
@@ -388,9 +388,12 @@ def ask_quitte():
                 Interact_Object.deplacer_cursor(e)
         
         # update affichage
-        rect = pygame.Rect(mid_screen(0) - resize(225), mid_screen(1) - resize(150), resize(450), resize(300))
+        rect = pygame.Rect(mid_screen(0) - resize(300), mid_screen(1) - resize(200), resize(600), resize(400))
         pygame.draw.rect(SCREEN, (50,50,50), rect, 0, resize(20))
         pygame.draw.rect(SCREEN, changer_couleur_100((50,50,50), 15), rect, resize(5), resize(20))
+        place_texte_1 = annonce_font.size("Voulez-vous Quitter ?")
+        texte_1 = annonce_font.render("Voulez-vous Quitter ?", True, (255,225,225))
+        SCREEN.blit(texte_1, (mid_screen(0) - place_texte_1[0] / 2, resize(270) + screen_pos))
         pygame.mouse.set_cursor(0)
         # affichage des objets
         for object_ in Interact_Object.objects:
