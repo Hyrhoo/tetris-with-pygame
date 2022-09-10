@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jun  8 08:08:28 2022
 
-@author: Hyrhoo
 """
 
 FPS = 60
@@ -102,11 +100,11 @@ EQUIVALENT_TOUCHES = {1073741906:"up",
                       1073741905:"down",
                       1073741904:"left",
                       1073741903:"right",
-                      1073742048:"ctrl",
+                      1073742048:"ctrl l",
+                      1073742052:"ctrl g",
                       1073742050:"alt",
-                      1073742052:"ctrl",
                       1073742054:"alt.gr",
-                      1073742049:"shift",
-                      1073742053:"shift",
+                      1073742049:"shift l",
+                      1073742053:"shift g",
                       32:"espace",
                       9:"tab"}

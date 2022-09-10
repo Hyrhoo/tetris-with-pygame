@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jun  8 08:08:28 2022
 
-@author: Hyrhoo
 """
 
 def calcule_multi_reso(screen_size):

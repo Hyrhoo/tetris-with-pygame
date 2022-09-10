@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jun  8 08:08:28 2022
 
-@author: Hyrhoo
 """
 
-from operator import index
 import sys
 import random
-from unicodedata import decimal
 
 from fonctions.bouton import *
 from fonctions.tirette import *
@@ -66,13 +62,13 @@ def main_menu():
     Bouton(parametre, "Paramètres", pos_y=mid_screen(1)-resize(50), back_color=(23,147,231), texte_color=(15,23,50))
     Bouton(maps, "Maps", pos_y=mid_screen(1)+resize(50), back_color=(231, 147, 157), texte_color=(50,15,20))
     Bouton(scores, "Score", pos_y=mid_screen(1)+resize(150), back_color=(23,231,147), texte_color=(15,50,23))
-    Bouton(quitter_jeu, "Quitter", pos_y=mid_screen(1)+resize(250), back_color=(255,123,76), texte_color=(50,15,23), sound="quit")
+    Bouton(ask_quitte, "Quitter", pos_y=mid_screen(1)+resize(250), back_color=(255,123,76), texte_color=(50,15,23))
     # main loop du menu principale
     while True:
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
-                play_sound("quit")
-                quitter_jeu()
+                play_sound("select")
+                ask_quitte()
 
             # gestion de la pression des boutons
             for object_ in Interact_Object.objects:
@@ -80,8 +76,8 @@ def main_menu():
 
             if e.type == pygame.KEYDOWN:
                 if e.key == 27:
-                    play_sound("quit")
-                    quitter_jeu()
+                    play_sound("select")
+                    ask_quitte()
                 Interact_Object.deplacer_cursor(e)
                 print(e)
 
@@ -118,8 +114,8 @@ def select_mod():
     while True:
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
-                play_sound("quit")
-                quitter_jeu()
+                play_sound("select")
+                ask_quitte()
         
             for object_ in Interact_Object.objects:
                 object_.interact(e)
@@ -173,7 +169,8 @@ def get_touche_name(key, value):
         name = EQUIVALENT_TOUCHES[key]
     except:
         name = value
-    return name.capitalize()
+    
+    return name.title()
 
 def affichage_para_control():
     from fonctions.fonc import screen_pos
@@ -211,8 +208,6 @@ def changer_touche():
         Clock.tick(FPS)
     play_sound("pause")
     return touche
-    if touche not in TOUCHES_INTERDITE :#and touche not in parametres["touches"]:
-        return touche
 
 def changer_para_touche(touche, nouv_touche, nom):
     texte = get_touche_name(touche[0], touche[1])
@@ -251,8 +246,8 @@ def parametre():
     while True:
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
-                play_sound("quit")
-                quitter_jeu()
+                play_sound("select")
+                ask_quitte()
         
             for object_ in Interact_Object.objects:
                 value = object_.interact(e)
@@ -305,8 +300,8 @@ def maps():
     while True:
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
-                play_sound("quit")
-                quitter_jeu()
+                play_sound("select")
+                ask_quitte()
         
             for object_ in Interact_Object.objects:
                 object_.interact(e)
@@ -315,7 +310,7 @@ def maps():
                 if e.key == 27:
                     play_sound("back")
                     main_menu()
-                Bouton.deplacer_cursor(e)
+                Interact_Object.deplacer_cursor(e)
                 print(e)
 
             if e.type == pygame.MOUSEBUTTONDOWN:
@@ -343,8 +338,8 @@ def scores():
     while True:
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
-                play_sound("quit")
-                quitter_jeu()
+                play_sound("select")
+                ask_quitte()
         
             for object_ in Interact_Object.objects:
                 object_.interact(e)
@@ -353,7 +348,7 @@ def scores():
                 if e.key == 27:
                     play_sound("back")
                     main_menu()
-                Bouton.deplacer_cursor(e)
+                Interact_Object.deplacer_cursor(e)
                 print(e)
 
             if e.type == pygame.MOUSEBUTTONDOWN:
@@ -371,6 +366,39 @@ def scores():
         
         # set fps
         clock.tick(FPS)
+
+def ask_quitte():
+    Interact_Object.reset_objects()
+    Bouton(quitter_jeu, "Oui", pos_y=mid_screen(1) - resize(50), back_color=(255,123,76), texte_color=(50,15,23), sound="quit")
+    Bouton(main_menu, "Non", pos_y=mid_screen(1) + resize(50), back_color=(23,231,147), texte_color=(15,50,23), sound="back")
+    Clock = pygame.time.Clock()
+    menu = True
+    while menu:
+        for e in pygame.event.get():
+            if e.type == pygame.QUIT:
+                quitter_jeu()
+
+            for object_ in Interact_Object.objects:
+                object_.interact(e)
+
+            if e.type == pygame.KEYDOWN:
+                if e.key == 27:
+                    play_sound("back")
+                    main_menu()
+                Interact_Object.deplacer_cursor(e)
+        
+        # update affichage
+        rect = pygame.Rect(mid_screen(0) - resize(225), mid_screen(1) - resize(150), resize(450), resize(300))
+        pygame.draw.rect(SCREEN, (50,50,50), rect, 0, resize(20))
+        pygame.draw.rect(SCREEN, changer_couleur_100((50,50,50), 15), rect, resize(5), resize(20))
+        pygame.mouse.set_cursor(0)
+        # affichage des objets
+        for object_ in Interact_Object.objects:
+            object_.detect_survole()
+            object_.affichage()
+        pygame.display.flip()
+        Clock.tick(FPS)
+
 
 def quitter_jeu():
     pygame.mouse.set_cursor(0)
