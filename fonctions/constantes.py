@@ -3,7 +3,6 @@
 
 """
 
-
 FPS = 60
 
 DEFAULT_FOLDER = "- Tetris 99 - Switch"
