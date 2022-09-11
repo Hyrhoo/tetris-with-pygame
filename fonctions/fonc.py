@@ -3,6 +3,13 @@
 
 """
 
+from json import load, dump
+try:import pygame
+except ImportError: raise ImportError("""
+>>> La bibliothèque pygame n'est pas installer sur votre ordinateur
+Pour l'installer utilisez la commende "pip install pygame" dans une invite de commande""")
+
+
 def calcule_multi_reso(screen_size):
     """
     The calcule_multi_reso function calculates the resolution of a screen based on the size of an image.
@@ -21,11 +28,6 @@ def calcule_multi_reso(screen_size):
     print(rasio)
     return rasio
 
-from json import load, dump
-try:import pygame
-except ImportError: raise ImportError("""
->>> La bibliothèque pygame n'est pas installer sur votre ordinateur
-Pour l'installer utilisez la commende "pip install pygame" dans une invite de commande""")
 
 pygame.init()
 screen_info = pygame.display.Info()

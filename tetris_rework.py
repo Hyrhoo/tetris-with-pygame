@@ -5,6 +5,7 @@
 
 import sys
 import random
+import traceback
 
 from fonctions.bouton import *
 from fonctions.tirette import *
@@ -368,9 +369,17 @@ def scores():
         clock.tick(FPS)
 
 def ask_quitte():
+    dic_fonc = {"main_menu": main_menu,
+                "select_mod": select_mod,
+                "parametre": parametre,
+                "maps": maps,
+                "scores": scores}
+    last_fonc = str(traceback.extract_stack()[-2]).split()[-1].strip(">")
+    if last_fonc == "interact": last_fonc = str(traceback.extract_stack()[-3]).split()[-1].strip(">")
+    last_fonc = dic_fonc[last_fonc]
     Interact_Object.reset_objects()
-    Bouton(quitter_jeu, "Oui", pos_y=mid_screen(1) - resize(10), hauteur=100, largeur=250, taille_texte=60, back_color=(255,123,76), texte_color=(50,15,23), arrondissement=40, sound="quit")
-    Bouton(main_menu, "Non", pos_y=mid_screen(1) + resize(110), hauteur=100, largeur=250, taille_texte=60, back_color=(23,231,147), texte_color=(15,50,23), arrondissement=40, sound="back")
+    Bouton(quitter_jeu, "Oui", pos_y=mid_screen(1) - resize(10), hauteur=100, largeur=275, taille_texte=60, back_color=(255,123,76), texte_color=(50,15,23), arrondissement=40, sound="quit")
+    Bouton(last_fonc, "Annuler", pos_y=mid_screen(1) + resize(110), hauteur=100, largeur=275, taille_texte=60, back_color=(23,231,147), texte_color=(15,50,23), arrondissement=40, sound="back")
     Clock = pygame.time.Clock()
     menu = True
     while menu:
@@ -384,7 +393,7 @@ def ask_quitte():
             if e.type == pygame.KEYDOWN:
                 if e.key == 27:
                     play_sound("back")
-                    main_menu()
+                    last_fonc()
                 Interact_Object.deplacer_cursor(e)
         
         # update affichage
@@ -407,7 +416,8 @@ def quitter_jeu():
     pygame.mouse.set_cursor(0)
     stop_all_sound()
     play_sound("quit")
-    time = int(sounds["quit"].get_length() * 1000)
+    #time = int(sounds["quit"].get_length() * 1000)
+    time = 1500
     pygame.mixer.fadeout(time)
     pygame.mixer.music.fadeout(time)
     pygame.time.wait(time)
