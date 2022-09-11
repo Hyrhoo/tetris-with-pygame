@@ -3,6 +3,7 @@
 
 """
 
+
 import sys
 import random
 import traceback
@@ -373,16 +374,18 @@ def ask_quitte():
                 "parametre": parametre,
                 "maps": maps,
                 "scores": scores}
+
     last_fonc = str(traceback.extract_stack()[-2]).split()[-1].strip(">")
     if last_fonc == "interact": last_fonc = str(traceback.extract_stack()[-3]).split()[-1].strip(">")
     last_fonc = dic_fonc[last_fonc]
+
     reset_scroll()
     Interact_Object.reset_objects()
     Bouton(quitter_jeu, "Oui", pos_y=mid_screen(1) - resize(10), hauteur=100, largeur=275, taille_texte=60, back_color=(255,123,76), texte_color=(50,15,23), arrondissement=40, sound="quit", scroll=False)
     Bouton(last_fonc, "Annuler", pos_y=mid_screen(1) + resize(110), hauteur=100, largeur=275, taille_texte=60, back_color=(23,231,147), texte_color=(15,50,23), arrondissement=40, sound="back", scroll=False)
     Clock = pygame.time.Clock()
-    menu = True
-    while menu:
+
+    while True:
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 quitter_jeu()
@@ -395,19 +398,22 @@ def ask_quitte():
                     play_sound("back")
                     last_fonc()
                 Interact_Object.deplacer_cursor(e)
-        
+
         # update affichage
         rect = pygame.Rect(mid_screen(0) - resize(300), mid_screen(1) - resize(200), resize(600), resize(400))
         pygame.draw.rect(SCREEN, (50,50,50), rect, 0, resize(20))
         pygame.draw.rect(SCREEN, changer_couleur_100((50,50,50), 15), rect, resize(5), resize(20))
+
         place_texte_1 = annonce_font.size("Voulez-vous Quitter ?")
         texte_1 = annonce_font.render("Voulez-vous Quitter ?", True, (255,225,225))
         SCREEN.blit(texte_1, (mid_screen(0) - place_texte_1[0] / 2, resize(270) + screen_pos))
         pygame.mouse.set_cursor(0)
+
         # affichage des objets
         for object_ in Interact_Object.objects:
             object_.detect_survole()
             object_.affichage()
+
         pygame.display.flip()
         Clock.tick(FPS)
 
