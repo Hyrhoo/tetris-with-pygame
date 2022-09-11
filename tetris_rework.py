@@ -206,6 +206,7 @@ def changer_touche():
         for e in pygame.event.get():
             if e.type == pygame.KEYDOWN:
                 touche = [e.key, e.unicode]
+                print(touche, e)
         Clock.tick(FPS)
     play_sound("pause")
     return touche
@@ -213,7 +214,6 @@ def changer_touche():
 def changer_para_touche(touche, nouv_touche, nom):
     texte = get_touche_name(touche[0], touche[1])
     if nouv_touche[0] not in TOUCHES_INTERDITE:
-        print("pas interdi")
         parametres["touches"][nom] = nouv_touche
         texte = get_touche_name(nouv_touche[0], nouv_touche[1])
         lecture_fichier("parametres", "w", parametres)
@@ -262,7 +262,6 @@ def parametre():
                     parametres["volume"]["sound_volume"] = float(value / 10)
                     save_para_vol()
                 if object_ in touches and type(value) == list:
-                    print(value)
                     nom = noms_touches[touches.index(object_)]
                     texte = changer_para_touche(parametres["touches"][nom], value, nom)
                     object_.texte = texte
@@ -377,9 +376,10 @@ def ask_quitte():
     last_fonc = str(traceback.extract_stack()[-2]).split()[-1].strip(">")
     if last_fonc == "interact": last_fonc = str(traceback.extract_stack()[-3]).split()[-1].strip(">")
     last_fonc = dic_fonc[last_fonc]
+    reset_scroll()
     Interact_Object.reset_objects()
-    Bouton(quitter_jeu, "Oui", pos_y=mid_screen(1) - resize(10), hauteur=100, largeur=275, taille_texte=60, back_color=(255,123,76), texte_color=(50,15,23), arrondissement=40, sound="quit")
-    Bouton(last_fonc, "Annuler", pos_y=mid_screen(1) + resize(110), hauteur=100, largeur=275, taille_texte=60, back_color=(23,231,147), texte_color=(15,50,23), arrondissement=40, sound="back")
+    Bouton(quitter_jeu, "Oui", pos_y=mid_screen(1) - resize(10), hauteur=100, largeur=275, taille_texte=60, back_color=(255,123,76), texte_color=(50,15,23), arrondissement=40, sound="quit", scroll=False)
+    Bouton(last_fonc, "Annuler", pos_y=mid_screen(1) + resize(110), hauteur=100, largeur=275, taille_texte=60, back_color=(23,231,147), texte_color=(15,50,23), arrondissement=40, sound="back", scroll=False)
     Clock = pygame.time.Clock()
     menu = True
     while menu:
