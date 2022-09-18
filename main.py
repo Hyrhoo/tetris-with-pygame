@@ -178,8 +178,8 @@ def affichage_para_control():
     back_rect = pygame.Rect(resize((1536 - 750) / 2), resize(600) + screen_pos, resize(750), resize(470))
     pygame.draw.rect(SCREEN, (55,37,54), back_rect, 0, 20)
 
-    place_texte_1 = titre_font.size("Controles")
-    texte_1 = titre_font.render("Controles", True, (200,200,255))
+    place_texte_1 = titre_font.size("Contrôles")
+    texte_1 = titre_font.render("Contrôles", True, (200,200,255))
     SCREEN.blit(texte_1, (mid_screen(0) - place_texte_1[0] / 2, resize(630) + screen_pos))
 
     keys = list(parametres["touches"].keys())
