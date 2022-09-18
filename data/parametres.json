@@ -1,6 +1,6 @@
 {
   "volume": {
-    "global_volume": 0.2,
+    "global_volume": 0.5,
     "music_volume": 0.5,
     "sound_volume": 0.5
   },
@@ -33,5 +33,15 @@
       32,
       " "
     ]
+  },
+  "repeat key": {
+    "menu": {
+      "delay": 250,
+      "interval": 100
+    },
+    "game": {
+      "delay": 250,
+      "interval": 100
+    }
   }
 }

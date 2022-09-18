@@ -5,13 +5,14 @@
 
 import sys
 import random
-import traceback
+from traceback import extract_stack
 
 from fonctions.bouton import *
 from fonctions.tirette import *
 
 annonce_font = pygame.font.SysFont("franklin gothic heavy", resize(50))
 titre_font = pygame.font.SysFont("franklin gothic heavy", resize(40))
+sous_titre_font = pygame.font.SysFont("franklin gothic heavy", resize(30))
 menu_font = pygame.font.SysFont("franklin gothic heavy", resize(25))
 
 ca_background = "data/images/background/"
@@ -32,31 +33,31 @@ jeu_background = pygame.transform.scale(jeu_background, (resize(1536), resize(86
 
 init_music("- Tetris 99 - Switch", ".mp3")
 
-plateau = [[0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0]]
+plateau = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 
 
 
 def main_menu():
-    reset_scroll()
+    set_scroll()
     Interact_Object.reset_objects()
     # initialisation des boutons
     Bouton(select_mod, "Jouer", pos_y=mid_screen(1)-resize(150), back_color=(249,198,54), texte_color=(50,50,15))
@@ -99,7 +100,7 @@ def main_menu():
         clock.tick(FPS)
 
 def select_mod():
-    reset_scroll()
+    set_scroll()
     Interact_Object.reset_objects()
 
     Bouton(main_menu, "BACK", back_color=(150,100,100), texte_color=(50,0,0), pos_x=resize(55), pos_y=resize(25), hauteur=40, largeur=100, taille_texte=30, sound="back", scroll=False)
@@ -170,7 +171,6 @@ def get_touche_name(key, value):
         name = EQUIVALENT_TOUCHES[key]
     except:
         name = value
-    
     return name.title()
 
 def affichage_para_control():
@@ -190,7 +190,6 @@ def affichage_para_control():
 def changer_touche():
     #from tetris_rework import parametres
     pygame.mouse.set_cursor(0)
-    Clock = pygame.time.Clock()
     
     rect = pygame.Rect(mid_screen(0) - resize(350), mid_screen(1) - resize(70), resize(700), resize(140))
     pygame.draw.rect(SCREEN, (50, 50, 50), rect, 0, resize(20))
@@ -207,7 +206,7 @@ def changer_touche():
             if e.type == pygame.KEYDOWN:
                 touche = [e.key, e.unicode]
                 print(touche, e)
-        Clock.tick(FPS)
+        clock.tick(FPS)
     play_sound("pause")
     return touche
 
@@ -219,15 +218,35 @@ def changer_para_touche(touche, nouv_touche, nom):
         lecture_fichier("parametres", "w", parametres)
     return texte
 
+def affichage_para_delay():
+    from fonctions.fonc import screen_pos
+    back_rect = pygame.Rect(resize((1536 - 750) / 2), resize(1140) + screen_pos, resize(750), resize(560))
+    pygame.draw.rect(SCREEN, (55,37,54), back_rect, 0, 20)
+
+    place_titre = titre_font.size("Paramètres de Latence des Touches")
+    titre = titre_font.render("Paramètres de Latence des Touches", True, (200,200,255))
+    sous_titre_1 = sous_titre_font.render("Menu :", True, (200,200,255))
+    sous_titre_2 = sous_titre_font.render("Jeu :", True, (200,200,255))
+    texte_1 = menu_font.render("Temps après le 1er apuille (en ms)", True, (200,200,255))
+    texte_2 = menu_font.render("Temps entre chaque apuille (en ms)", True, (200,200,255))
+
+    SCREEN.blit(titre, (mid_screen(0) - place_titre[0] / 2, resize(1170) + screen_pos))
+    SCREEN.blit(sous_titre_1, (resize((1536 - 400) / 2), resize(1240) + screen_pos))
+    SCREEN.blit(sous_titre_2, (resize((1536 - 400) / 2), resize(1460) + screen_pos))
+    SCREEN.blit(texte_1, (resize((1536 - 650) / 2), resize(1280) + screen_pos))
+    SCREEN.blit(texte_2, (resize((1536 - 650) / 2), resize(1360) + screen_pos))
+    SCREEN.blit(texte_1, (resize((1536 - 650) / 2), resize(1500) + screen_pos))
+    SCREEN.blit(texte_2, (resize((1536 - 650) / 2), resize(1580) + screen_pos))
+
 
 def parametre():
-    reset_scroll()
+    set_scroll()
     Interact_Object.reset_objects()
 
     Bouton(main_menu, "BACK", back_color=(150,100,100), texte_color=(50,0,0), pos_x=resize(55), pos_y=resize(25), hauteur=40, largeur=100, taille_texte=30, sound="back", scroll=False)
-    tirette_global_volum = Tirette(init_valiu=int(parametres["volume"]["global_volume"]*10), pos_y=resize(265))
-    tirette_music_volum = Tirette(init_valiu=int(parametres["volume"]["music_volume"]*10), pos_y=resize(365))
-    tirette_sound_volum = Tirette(init_valiu=int(parametres["volume"]["sound_volume"]*10), pos_y=resize(465))
+    tirette_global_volum = Tirette(init_valiu=int(parametres["volume"]["global_volume"]*10), pos_y=resize(265), taille_indication=23)
+    tirette_music_volum = Tirette(init_valiu=int(parametres["volume"]["music_volume"]*10), pos_y=resize(365), taille_indication=23)
+    tirette_sound_volum = Tirette(init_valiu=int(parametres["volume"]["sound_volume"]*10), pos_y=resize(465), taille_indication=23)
     touche = parametres["touches"]["Chute instantané"]
     touches = [None,]*8
     touches[0] = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(720), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
@@ -243,6 +262,11 @@ def parametre():
     touches[5] = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(960), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
     touche = parametres["touches"]["Réserve"]
     touches[6] = Bouton(changer_touche, get_touche_name(touche[0], touche[1]), pos_x=resize(1000), pos_y=resize(1008), back_color=(120, 220, 255), texte_color=(30, 55, 70), hauteur=40, largeur=130, taille_texte=30, arrondissement=20)
+
+    Tirette((50, 1000), parametres["repeat key"]["menu"]["delay"], pos_y=resize(1335), taille_indication=23, pas=10)
+    Tirette((50, 1000), parametres["repeat key"]["menu"]["interval"], pos_y=resize(1415), taille_indication=23, pas=10)
+    Tirette((50, 1000), parametres["repeat key"]["game"]["delay"], pos_y=resize(1555), taille_indication=23, pas=10)
+    Tirette((50, 1000), parametres["repeat key"]["game"]["interval"], pos_y=resize(1635), taille_indication=23, pas=10)
 
     while True:
         for e in pygame.event.get():
@@ -274,13 +298,14 @@ def parametre():
                 print(e)
 
             if e.type == pygame.MOUSEBUTTONDOWN:
-                derouler_screen(0, 1170, e)
+                derouler_screen(0, 1800, e)
         
         # update affichage
         SCREEN.fill((54,57,63))
         SCREEN.blit(parametres_background, (0,0))
         affichage_para_vol()
         affichage_para_control()
+        affichage_para_delay()
         pygame.mouse.set_cursor(0)
         # affichage des objets
         for object_ in Interact_Object.objects:
@@ -292,7 +317,7 @@ def parametre():
         clock.tick(FPS)
 
 def maps():
-    reset_scroll()
+    set_scroll()
     Interact_Object.reset_objects()
 
     Bouton(main_menu, "BACK", back_color=(150,100,100), texte_color=(50,0,0), pos_x=resize(55), pos_y=resize(25), hauteur=40, largeur=100, taille_texte=30, sound="back", scroll=False)
@@ -330,7 +355,7 @@ def maps():
         clock.tick(FPS)
 
 def scores():
-    reset_scroll()
+    set_scroll()
     Interact_Object.reset_objects()
 
     Bouton(main_menu, "BACK", back_color=(150,100,100), texte_color=(50,0,0), pos_x=resize(55), pos_y=resize(25), hauteur=40, largeur=100, taille_texte=30, sound="back", scroll=False)
@@ -374,15 +399,14 @@ def ask_quitte():
                 "maps": maps,
                 "scores": scores}
 
-    last_fonc = str(traceback.extract_stack()[-2]).split()[-1].strip(">")
-    if last_fonc == "interact": last_fonc = str(traceback.extract_stack()[-3]).split()[-1].strip(">")
+    last_fonc = str(extract_stack()[-2]).split()[-1].strip(">")
+    if last_fonc == "interact": last_fonc = str(extract_stack()[-3]).split()[-1].strip(">")
     last_fonc = dic_fonc[last_fonc]
 
-    reset_scroll()
+    set_scroll()
     Interact_Object.reset_objects()
     Bouton(quitter_jeu, "Oui", pos_y=mid_screen(1) - resize(10), hauteur=100, largeur=275, taille_texte=60, back_color=(255,123,76), texte_color=(50,15,23), arrondissement=40, sound="quit", scroll=False)
     Bouton(last_fonc, "Annuler", pos_y=mid_screen(1) + resize(110), hauteur=100, largeur=275, taille_texte=60, back_color=(23,231,147), texte_color=(15,50,23), arrondissement=40, sound="back", scroll=False)
-    Clock = pygame.time.Clock()
 
     while True:
         for e in pygame.event.get():
@@ -414,7 +438,7 @@ def ask_quitte():
             object_.affichage()
 
         pygame.display.flip()
-        Clock.tick(FPS)
+        clock.tick(25)
 
 
 def quitter_jeu():
@@ -440,6 +464,8 @@ play_music("main_menu", -1)
 set_volum_music(parametres["volume"]["global_volume"] * parametres["volume"]["music_volume"])
 set_volum_sounds(parametres["volume"]["global_volume"] * parametres["volume"]["sound_volume"])
 
+pygame.key.set_repeat(parametres["repeat key"]["menu"]["delay"], parametres["repeat key"]["menu"]["interval"])
+
 try:
     main_menu()        
 except RecursionError:
@@ -450,7 +476,6 @@ except RecursionError:
     info_font = pygame.font.SysFont("Segoe UI", resize(35))
     error_font = pygame.font.SysFont("Segoe UI", resize(15))
 
-    Clock = pygame.time.Clock()
     nbr = 10
     while nbr:
         for e in pygame.event.get():
@@ -481,4 +506,4 @@ except RecursionError:
         SCREEN.blit(lien, (resize(150), resize(700)))
         
         pygame.display.flip()
-        Clock.tick(10)
+        clock.tick(10)

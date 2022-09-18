@@ -32,6 +32,7 @@ def calcule_multi_reso(screen_size):
 pygame.init()
 screen_info = pygame.display.Info()
 screen_size = (650, 500)
+screen_size = (1536, 864)
 screen_size = screen_info.current_w, screen_info.current_h
 SCREEN = pygame.display.set_mode(screen_size)#, pygame.FULLSCREEN)
 screen_pos = 0
@@ -50,15 +51,15 @@ def lecture_fichier(fichier, metod = "r", donner = None):
             dump(donner, f, ensure_ascii=False, indent=2)
 
 def resize(valiu: int):
-    return int(round(valiu * MULTI_RESO, 0))
+    return int(round(valiu * MULTI_RESO))
 
 def mid_screen(value: int, divi: int = 2):
     mid = int(round(screen_size[value] / divi, 0))
     return mid
 
-def reset_scroll():
+def set_scroll(pos=0):
     global screen_pos
-    screen_pos = 0
+    screen_pos = pos
 
 def derouler_screen(haut, bas, e):
     """
@@ -74,7 +75,7 @@ def derouler_screen(haut, bas, e):
     """
     global screen_pos
     scroll = resize(50)
-    bas -= 864
+    bas -= 864 - resize(screen_size[1] - 864)
     if bas < haut:
         bas = haut
     if e.button == 4:

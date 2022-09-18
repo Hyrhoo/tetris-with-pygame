@@ -3,6 +3,9 @@
 
 """
 
+from select import select
+
+
 try: 
     from fonctions.fonc import *
     from fonctions.constantes import *
@@ -60,11 +63,35 @@ class Interact_Object():
             Interact_Object.select -= 1
             if Interact_Object.select < 0:
                 Interact_Object.select = len(Interact_Object.objects)-1
+            if Interact_Object.objects[Interact_Object.select].scroll:
+                Interact_Object.scroll_select()
         if event.key == 1073741905:
             play_sound("cursor")
             Interact_Object.select += 1
             if Interact_Object.select > len(Interact_Object.objects)-1:
                 Interact_Object.select = 0
+            if Interact_Object.objects[Interact_Object.select].scroll:
+                Interact_Object.scroll_select()
+
+    def scroll_select():
+        try: from fonctions.fonc import screen_pos
+        except ModuleNotFoundError or ImportError: from fonc import screen_pos
+        if Interact_Object.select != -1:
+            bottom = screen_size[1] - screen_pos
+            top = - screen_pos
+            bottom_select = Interact_Object.objects[Interact_Object.select].rectangle.bottom + resize(50)
+            top_select = Interact_Object.objects[Interact_Object.select].rectangle.top - resize(50)
+            diff = 0
+            print(top, top_select)
+            print(bottom, bottom_select)
+            if bottom_select > bottom:
+                diff = bottom_select - bottom
+            if top_select < top:
+                diff = top_select - top
+            diff = -diff + screen_pos
+            set_scroll(diff)
+            print(diff)
+
 
     def reset_objects():
         Interact_Object.objects.clear()

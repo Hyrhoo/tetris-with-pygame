@@ -10,23 +10,25 @@ except ModuleNotFoundError or ImportError:
 
 class Tirette(Interact_Object):
 
-    def __init__(self, valiu = (0,10), init_valiu = 0, pos_x = mid_screen(0), pos_y = mid_screen(1), hauteur = 40, largeur = 400, eppesseur = 3, taille_boule = 20, texte_font = "franklin gothic heavy", texte_color = (150,150,150), back_color = (50,50,50), boule_color = (255,255,255), trait_color = (100,100,100), arrondissement = 100000, scroll = True):
+    def __init__(self, valiu = (0,10), init_valiu = 0, pas=1, pos_x = mid_screen(0), pos_y = mid_screen(1), hauteur = 40, largeur = 400, eppesseur = 3, taille_boule = 20, texte_font = "franklin gothic heavy", taille_indication=0, texte_color = (150,150,150), back_color = (50,50,50), boule_color = (255,255,255), trait_color = (100,100,100), arrondissement = 100000, scroll = True):
         Interact_Object.__init__(self, pos_x, pos_y, hauteur, largeur, back_color, arrondissement, scroll)
         self.valius = range(valiu[0], valiu[1]+1)
         self.init_valiu = init_valiu
 
         self.eppesseur = resize(eppesseur)
-        self.start = self.pos_x + (self.largeur * 0.15)
-        self.end = self.pos_x + (self.largeur * 0.85)
+        self.start = self.pos_x + (self.largeur * 0.17)
+        self.end = self.pos_x + (self.largeur * 0.83)
         self.trais_pos_y = (self.pos_y + self.hauteur / 2) - 1
         self.trait_color = trait_color
         self.longueur_trait = self.end - self.start
 
         self.place_texte = self.start - (self.pos_x + self.hauteur / 4)
-        self.taille_texte = min(int(round(self.hauteur * 0.75, 0)), int(round(self.place_texte / len(str(self.valius[-1])) * 0.75, 0)))
+        self.taille_texte = min(int(round(self.hauteur * 0.8)), int(round(self.place_texte / len(str(self.valius[-1])) * 0.8)))
         self.font = pygame.font.SysFont(texte_font, self.taille_texte)
+        self.indic_font = pygame.font.SysFont(texte_font, resize(taille_indication)) if taille_indication else self.font
         self.texte_color = texte_color
 
+        self.pas = pas
         self.deca_valiu = self.longueur_trait / (len(self.valius)-1)
 
         self.taille_boule = resize(taille_boule)
@@ -57,13 +59,13 @@ class Tirette(Interact_Object):
         """
         try: from fonctions.fonc import screen_pos
         except ModuleNotFoundError or ImportError: from fonc import screen_pos
-        taille = self.font.size(str(self.init_valiu))
+        taille = self.indic_font.size(str(self.init_valiu))
         hauteur = taille[1] + taille[1] / 3
         largeur = taille[0] + taille[1] / 1.5
         y = self.pos_y - hauteur / 0.78
         x = self.boule_pos_x + self.deca_valiu * (self.init_valiu - self.valius[0]) + self.taille_boule / 2 - largeur / 2
         self.rectangle_indic = pygame.Rect(x, y + screen_pos, largeur, hauteur)
-        self.texte_indic = self.font.render(str(self.init_valiu), True, self.texte_color)
+        self.texte_indic = self.indic_font.render(str(self.init_valiu), True, self.texte_color)
         self.pos_texte_indic_x = x + largeur / 2 - taille[0] / 2
         self.pos_texte_indic_y = y + hauteur / 2 - taille[1] / 2 + screen_pos
 
@@ -91,9 +93,9 @@ class Tirette(Interact_Object):
         SCREEN.blit(self.texte_2, (self.pos_x_texte_2, self.pos_y_texte + screen_pos))
 
         pygame.draw.line(SCREEN, self.trait_color, (self.start, self.trais_pos_y + screen_pos), (self.end, self.trais_pos_y + screen_pos), self.eppesseur)
-        self.boule.x += self.deca_valiu * (self.init_valiu - self.valius[0])
+        self.boule.x += round(self.deca_valiu * (self.init_valiu - self.valius[0]))
         pygame.draw.rect(SCREEN, self.boule_color, self.boule, 0, self.taille_boule)
-        self.boule.x -= self.deca_valiu * (self.init_valiu - self.valius[0])
+        self.boule.x -= round(self.deca_valiu * (self.init_valiu - self.valius[0]))
         self.rectangle.y -= screen_pos
         self.boule.y -= screen_pos
     
@@ -110,18 +112,16 @@ class Tirette(Interact_Object):
         value = self.init_valiu
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and survoler: self.selection = True
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1: self.selection = False
-        #if pygame.mouse.get_pressed()[0]:
-        #    if survoler:
         if self.selection:
-                self.init_valiu = int(round((pygame.mouse.get_pos()[0] - self.start) / self.deca_valiu, 0))
+                self.init_valiu = self.pas * int(round((pygame.mouse.get_pos()[0] - self.start + resize(len(self.valius) / 60)) / (self.deca_valiu * self.pas)))
                 if self.init_valiu < self.valius[0]: self.init_valiu = self.valius[0]
                 elif self.init_valiu > self.valius[-1]: self.init_valiu = self.valius[-1]
         if event.type == pygame.KEYDOWN:
             if survoler:
                 if event.key == pygame.K_RIGHT:
-                    self.init_valiu += 1
+                    self.init_valiu += self.pas
                 elif event.key == pygame.K_LEFT:
-                    self.init_valiu -= 1
+                    self.init_valiu -= self.pas
                 if self.init_valiu < self.valius[0]: self.init_valiu = self.valius[0]
                 elif self.init_valiu > self.valius[-1]: self.init_valiu = self.valius[-1]
         if value != self.init_valiu:
