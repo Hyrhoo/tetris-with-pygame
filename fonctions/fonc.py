@@ -9,37 +9,9 @@ except ImportError: raise ImportError("""
 >>> La bibliothèque pygame n'est pas installer sur votre ordinateur
 Pour l'installer utilisez la commende "pip install pygame" dans une invite de commande""")
 
-
-def calcule_multi_reso(screen_size):
-    """
-    The calcule_multi_reso function calculates the resolution of a screen based on the size of an image.
-        Args:
-            screen_size (tuple): A tuple containing the width and height of a screen in pixels.
-        Returns:
-            diff_x (float): The ratio between 1536 and width.
-    
-    :param screen_size: Calculate the difference between the screen resolution and the image resolution
-    :return: The difference between the screen size and the image size
-    :doc-author: Trelent
-    """
-    diff_x = screen_size[0]/1536
-    diff_y = screen_size[1]/864
-    rasio = min(diff_x, diff_y)
-    print(rasio)
-    return rasio
-
-
 pygame.init()
-screen_info = pygame.display.Info()
-screen_size = (650, 500)
-screen_size = (1536, 864)
-screen_size = screen_info.current_w, screen_info.current_h
-SCREEN = pygame.display.set_mode(screen_size)#, pygame.FULLSCREEN)
-screen_pos = 0
-clock = pygame.time.Clock()
 
-MULTI_RESO = calcule_multi_reso(screen_size)
-screen_size = (1536*MULTI_RESO, 864*MULTI_RESO)
+main_clock = pygame.time.Clock()
 
 def lecture_fichier(fichier, metod = "r", donner = None):
     if metod == "r":
@@ -50,42 +22,6 @@ def lecture_fichier(fichier, metod = "r", donner = None):
         with open("data/" + fichier + ".json", metod, encoding="UTF-8") as f:
             dump(donner, f, ensure_ascii=False, indent=2)
 
-def resize(valiu: int):
-    return int(round(valiu * MULTI_RESO))
-
-def mid_screen(value: int, divi: int = 2):
-    mid = int(round(screen_size[value] / divi, 0))
-    return mid
-
-def set_scroll(pos=0):
-    global screen_pos
-    screen_pos = pos
-
-def derouler_screen(haut, bas, e):
-    """
-    The derouler_screen function is used to scroll through the screen.
-    It takes 3 arguments: haut, bas and e.
-    h is the top of the screen, b is the bottom of it and e is an event.
-    
-    :param haut: Set the top of the scrolling region
-    :param bas: Define the bottom of the screen
-    :param e: Get the mouse position
-    :return: The position of the scroll bar
-    :doc-author: Trelent
-    """
-    global screen_pos
-    scroll = resize(50)
-    bas -= 864 - resize(screen_size[1] - 864)
-    if bas < haut:
-        bas = haut
-    if e.button == 4:
-        screen_pos += scroll
-        if screen_pos > - haut:
-            screen_pos = - haut
-    elif e.button == 5:
-        screen_pos -= scroll
-        if screen_pos < - bas:
-            screen_pos = - bas
 
 def changer_couleur(couleur, opperation):
     """

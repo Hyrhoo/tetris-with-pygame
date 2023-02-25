@@ -8,7 +8,11 @@ try:
 except ModuleNotFoundError or ImportError: 
     from constantes import DEFAULT_FOLDER, DEFAULT_EXTENTION
 
-from os.path import exists
+import os
+from os.path import exists, normpath
+import pathlib
+for i in pathlib.Path("data/sound/- Tetris 99 - Switch/menu").iterdir():
+    print(i.match("back.mp3"))
 import pygame
 pygame.mixer.pre_init()
 pygame.init()
@@ -17,6 +21,31 @@ mix = pygame.mixer.Sound
 
 sounds = {} # name: sound object
 musics = {} # name: music folder
+
+class Sound:
+    def __init__(self, path) -> None:
+        self.not_load_musics = ["main_menu", "game_theme_1", "game_theme_2", "game_theme_3"]
+        self.not_load_sounds = ["back", "select", "cursor", "cursor1", "game_loanch", "quit", "pause",
+                                "start_1", "start_2", "lvl_up_1", "lvl_up_1", "danger", "win", "lose",
+                                "single", "double", "triple", "tetris", "all_clear",
+                                "combo_1", "combo_2", "combo_3", "combo_4", "combo_5", "combo_6", "combo_7", "combo_8",
+                                "combo_9", "combo_10", "combo_11", "combo_12", "combo_13", "combo_14", "combo_15+",
+                                "move", "rotate", "soft_drop", "hard_drop", "verouillage", "blocked", "T-spin", "hold"]
+        self.audio = {}
+        self.audio["sounds"] = {}
+        self.audio["musics"] = {}
+        self.init_audio(path)
+    
+    def init_audio(self, path):
+        for file in pathlib.Path(path).iterdir():
+            if file.is_dir():
+                self.init_audio(file)
+            else:
+                name = file.name()
+                cut = os.path.splitext(name)
+                is_music = cut[0] in self.not_load_musics
+                if is_music:
+                    pass
 
 def test_folder(name, folder, suite, extention, music = False):
     """
