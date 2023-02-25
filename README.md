@@ -1,4 +1,4 @@
 # tetris-with-pygame
 
-en cours de création.  
+en cours de re création.  
 non fonctionnelle
