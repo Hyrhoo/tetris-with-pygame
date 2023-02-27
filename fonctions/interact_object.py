@@ -1,8 +1,13 @@
+# -*- coding: utf-8 -*-
 try:
-    from fonctions.screen import *
+    from fonctions.screen import Screen
 except ModuleNotFoundError or ImportError:
-    from screen import *
-from fonctions.fonc import *
+    from screen import Screen
+
+import pygame
+
+pygame.init()
+
 class Interact_Object:
     def __init__(self, screen: Screen, x, y, width, height, object_color, around_color) -> None:
         self.screen = screen
@@ -20,10 +25,10 @@ class Interact_Object:
         self.is_cliqued = False
         self.is_soud_played = False
     
-    def is_select_fonc(self):
+    def is_select_fonc(self) -> None:
         pass
     
-    def is_over_fonc(self):
+    def is_over_fonc(self) -> None:
         """
         this fonction change the value of self.is_over:
             - to True is the cursor is in the object
@@ -33,7 +38,7 @@ class Interact_Object:
         x, y = pygame.mouse.get_pos()
         self.is_over = pygame.Rect.collidepoint(self.rect, x, y)
     
-    def is_cliqued_fonc(self, event):
+    def is_cliqued_fonc(self, event) -> None:
         """
         the fonction change the value of self.is_cliqued:
             - to True if the mouse button is pressed on the object
@@ -53,7 +58,7 @@ class Interact_Object:
         if not self.screen.get_active():
             self.is_cliqued = False
     
-    def si_sound_played_fonc(self):
+    def si_sound_played_fonc(self) -> None:
         if not self.is_over and not self.is_cliqued:
             self.is_soud_played = False
         elif self.is_cliqued or self.is_over:

@@ -5,6 +5,7 @@
 
 FPS = 60
 
+SOUND_FOLDER = "data/sound/"
 DEFAULT_FOLDER = "- Tetris 99 - Switch"
 DEFAULT_EXTENTION = ".mp3"
 
