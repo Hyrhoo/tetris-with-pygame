@@ -1,8 +1,4 @@
-try:
-    from fonctions.fonc import *
-except ModuleNotFoundError or ImportError:
-    from fonc import *
-
+# -*- coding: utf-8 -*-
 import pygame
 
 pygame.init()
@@ -33,7 +29,7 @@ class Screen:
         self.screen.scroll(0, self.screen_pos)
 
     @staticmethod
-    def mid_screen(value, nb_cut) -> float:
+    def mid_screen(value, nb_cut=2) -> float:
         return value / nb_cut
 
 if __name__ == "__main__":
