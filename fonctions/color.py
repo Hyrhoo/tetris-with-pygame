@@ -8,6 +8,10 @@ class Color(pygame.color.Color):
 
     def __init__(self, r, g, b, a=255) -> None:
         super().__init__(r, g, b, a)
+        self.__initial_r = r
+        self.__initial_g = g
+        self.__initial_b = b
+        self.__initial_a = a
     
     def lighter(self, aditiv_pourcent):
         self.r += round(((255 - self.r)/100) * aditiv_pourcent)
@@ -33,6 +37,13 @@ class Color(pygame.color.Color):
         self.g = round((self.g/100) * (100-g))
         self.b = round((self.b/100) * (100-b))
         return self
+    
+    def restor_color(self):
+        self.r = self.__initial_r
+        self.g = self.__initial_g
+        self.b = self.__initial_b
+        self.a = self.__initial_a
+        return self
 
 
 if __name__ == "__main__":
@@ -40,9 +51,9 @@ if __name__ == "__main__":
     color = Color(100, 100, 100)
     print(color.darcker(90))
     print(color)
-    #for i in range(5):
-    #    print(color1)
-    #    color1.lighter(10)
-    #    print(color1)
-    #    color1.darcker(10)
-    #print(color1)
+    for i in range(5):
+        print(color1)
+        color1.lighter(10)
+        print(color1)
+        color1.darcker(10)
+    print(color1)
