@@ -2,13 +2,11 @@
 try:
     from fonctions.screen import Screen
     from fonctions.color import Color
+    from fonctions.init import *
 except ModuleNotFoundError or ImportError:
     from screen import Screen
     from color import Color
-
-import pygame
-
-pygame.init()
+    from init import *
 
 class Interact_Object:
     def __init__(self, screen: Screen, x: float, y, width: float, height: float, object_color: Color, around_color: Color) -> None:

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-
-import pygame
+try:
+    from fonctions.init import *
+except ModuleNotFoundError or ImportError:
+    from init import *
 
 class Color(pygame.color.Color):
 

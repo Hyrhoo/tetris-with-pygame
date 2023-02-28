@@ -1,16 +1,10 @@
 # -*- coding: utf-8 -*-
 try:
     from fonctions.constantes import DEFAULT_FOLDER, DEFAULT_EXTENTION, SOUND_FOLDER
+    from fonctions.init import *
 except ModuleNotFoundError or ImportError:
     from constantes import DEFAULT_FOLDER, DEFAULT_EXTENTION, SOUND_FOLDER
-
-import os
-import pathlib
-import pygame
-
-pygame.mixer.pre_init()
-pygame.init()
-pygame.mixer.set_num_channels(32)
+    from init import *
 
 class Sound:
     def __init__(self, path) -> None:

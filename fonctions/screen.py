@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-import pygame
-
-pygame.init()
+try:
+    from fonctions.init import *
+except ModuleNotFoundError or ImportError:
+    from init import *
 
 
 class Screen:

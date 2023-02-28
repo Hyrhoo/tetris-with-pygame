@@ -2,3 +2,4 @@
 /data/*
 /fonctions/game/*
 #/.gitignore
+/a_garder.py

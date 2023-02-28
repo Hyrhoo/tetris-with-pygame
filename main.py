@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
-import os
-import pathlib
-import pygame
+from fonctions.init import *
 
 from fonctions.constantes import *
-from fonctions.fonc import *
 from fonctions.color import Color
 from fonctions.sound import Sound
 from fonctions.screen import Screen
